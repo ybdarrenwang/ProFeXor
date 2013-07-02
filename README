@@ -1,6 +1,6 @@
 <Introduction>
 
-ProFeXor ("Pro"sodic "Fe"ature e"X"tract"or") is an application that extracts the prosodic features corresponding to each "Syllable". In the output feature file, each line represents the extrated feature vector of one syllable. A "Syllable" we defined in ProFeXor includes:
+ProFeXor ("Pro"sodic "Fe"ature e"X"tract"or") is an application that extracts prosodic features from speech wave files based on corresponding raw pitch contours and time labels. A set of prosodic features will be extracted for each "Syllable". The defition of one "Syllable" in ProFeXor includes:
 
    (1) onset, nuclei, coda
    (2) time labels and durations of onset, nuclei and coda,
@@ -102,6 +102,10 @@ Note that trying to analyze feature importance while working with the latter cat
 For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look at them separately.
 
 Also, some traditional index of feature importance, such as entropy-related indices, are more correspondent the the criterion of Decision Tree-based models.
+
+5. Output file format
+ 
+In the output feature file, each line represents the extrated feature vector of one syllable.
 
 ================================================================================
 
