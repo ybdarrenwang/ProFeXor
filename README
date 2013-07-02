@@ -22,6 +22,7 @@ Pitcher is yet another stand-alone application for pitch contour processing. Not
 *  Run "make doc" if you have Doxygen
 
 ================================================================================
+
 <Settings and File format>
 
 1. REC file format

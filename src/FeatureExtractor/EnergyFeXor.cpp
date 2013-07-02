@@ -287,24 +287,24 @@ void EnergyFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool
 
 void EnergyFeXor::PrintDefinition(vector<string>& definition)
 {
-	definition.push_back("<Energy::begin> Energy of the first frame, normalized with sentence max frame energy");
-	definition.push_back("<Energy::end> Energy of the last frame, normalized with sentence max frame energy");
+	definition.push_back("<Energy::begin> Energy of the first frame");
+	definition.push_back("<Energy::end> Energy of the last frame");
 	definition.push_back("<Energy::slopeBegin> Energy contour slope at the beginning of character");
 	definition.push_back("<Energy::SlopeEnd> Energy contour slope at the end of character");
 	definition.push_back("<Energy::min> Minimum energy");
 	definition.push_back("<Energy::max> Maximum energy");
-	definition.push_back("<Energy::avg> Average frame energy, normalized with sentence max frame energy");
+	definition.push_back("<Energy::avg> Average frame energy");
 	definition.push_back("<Energy::avgSlope> Average the absolute value of slope curvature of energy contour");
-	definition.push_back("<Energy::avgNuclei> Average nuclei frame energy, normalized with sentence max frame energy");
-	definition.push_back("<Energy::totalNuclei> Sum of nuclei frame energy, normalized with sentence max frame energy");
+	definition.push_back("<Energy::avgNuclei> Average nuclei frame energy");
+	definition.push_back("<Energy::totalNuclei> Sum of nuclei frame energy");
 	for (int s=0; s<numOfSegment; s++)
 		definition.push_back("<Energy::segment["+int2str(s)+"]> Average energy of "+int2str(s)+"-th segment of nuclei");
 }
 
 void EnergyFeXor::PrintDeltaDefinition(vector<string>& definition)
 {
-	definition.push_back("<Energy::dBegin> Delta, energy of the first frame, normalized with sentence max frame energy");
-	definition.push_back("<Energy::dEnd> Delta, energy of the last frame, normalized with sentence max frame energy");
+	definition.push_back("<Energy::dBegin> Delta, energy of the first frame");
+	definition.push_back("<Energy::dEnd> Delta, energy of the last frame");
 	definition.push_back("<Energy::dbe> Difference between the energy values of the first and the last frame");
 	definition.push_back("<Energy::ddbe> Delta, difference between the energy values of the first and last frame");
 
@@ -318,7 +318,7 @@ void EnergyFeXor::PrintDeltaDefinition(vector<string>& definition)
 	definition.push_back("<Energy::range> Energy range (max-min)");
 	definition.push_back("<Energy::dRange> Delta, energy range");
 
-	definition.push_back("<Energy::dAvg> Delta, average frame energy, normalized with sentence max frame energy");
+	definition.push_back("<Energy::dAvg> Delta, average frame energy");
 	definition.push_back("<Energy::dAvgSlope> Delta, average the absolute value of slope curvature of energy contour");
 
 	definition.push_back("<Energy::dAvgNuclei> Difference between the current and preceding average nuclei frame energy");

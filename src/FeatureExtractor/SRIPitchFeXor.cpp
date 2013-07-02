@@ -29,15 +29,15 @@ void SRIPitchFeXor::Extract(Utterance* u, vector< vector<double> >& features, bo
 
 void SRIPitchFeXor::PrintDefinition(vector<string>& definition)
 {
-	definition.push_back("<SRIPitch::begin> log-f0 of the first frame of vowel, normalized with average sentence log-f0");
-	definition.push_back("<SRIPitch::end> log-f0 of the last frame of vowel, normalized with average sentence log-f0");
+	definition.push_back("<SRIPitch::begin> log-f0 of the first frame of vowel");
+	definition.push_back("<SRIPitch::end> log-f0 of the last frame of vowel");
 	definition.push_back("<SRIPitch::slopeBegin> Slope (difference) of log-f0 of the first two frames of vowel");
 	definition.push_back("<SRIPitch::slopeEnd> Slope (difference) of log-f0 of the last two frames of vowel");
-	definition.push_back("<SRIPitch::min> The smallest log-f0 value, normalized with average sentence log-f0");
+	definition.push_back("<SRIPitch::min> The smallest log-f0 value");
 	definition.push_back("<SRIPitch::n_min> The smallest log-f0 value, normalized with average vowel log-f0");
-	definition.push_back("<SRIPitch::max> The smallest log-f0 value, normalized with average sentence log-f0");
+	definition.push_back("<SRIPitch::max> The smallest log-f0 value");
 	definition.push_back("<SRIPitch::n_max> The largest log-f0 value, normalized with average vowel log-f0");
-	definition.push_back("<SRIPitch::avgPitch> Average vowel log-f0, normalized with average sentence log-f0");
+	definition.push_back("<SRIPitch::avgPitch> Average vowel log-f0");
 	definition.push_back("<SRIPitch::slopeSyl> Vowel log-f0 contour slope");
 	definition.push_back("<SRIPitch::avgSlope> Average the absolute value of slope (curvature) of log-f0 pitch contour");
 /*	definition.push_back("<SRIPitch::Legendre[0]> The 1st Discrete Legendre coefficient of vowel pitch contour");
