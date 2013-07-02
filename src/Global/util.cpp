@@ -186,9 +186,6 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 	delete myWav;
 }
 
-/** The number of frames of ESPS output is 2 less than HTK HCopy,
-* so we add 2 frames at the end.
-*/
 void LoadF0(string file_name, vector<double>& data)
 {
 	ifstream in_f0;
@@ -210,6 +207,4 @@ void LoadF0(string file_name, vector<double>& data)
 			cout<<"warning: abnormal f0 value: "<<buf<<endl;
 		data.push_back(f1);
 	}
-	data.push_back(f1);
-	data.push_back(f1);
 }

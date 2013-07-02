@@ -105,6 +105,19 @@ void UtteranceBuilder::BuildPitchContour(UtteranceInfo* info)
 {
 	pitchContour.clear();
 	LoadF0(info->GetF0File(), pitchContour);
+
+	// check if the number of frames of pitch contour is the same as time label
+	int numFrame = info->GetTimeLabel(info->GetNumUnit()-1, 3);
+	if (pitchContour.size() != numFrame)
+	{
+		cout<<"Warning: length of pitch contour is different from time label"<<endl;
+		if (pitchContour.size() < numFrame)
+			cout<<"Append "<<numFrame-pitchContour.size()<<" frames at the end of pitch contour"<<endl;
+		else
+			cout<<"Remove "<<pitchContour.size()-numFrame<<" frames from the back of pitch contour"<<endl;
+		pitchContour.resize(numFrame);
+	}
+
 	Vector_log(pitchContour);
 	if (pitchContourInterpolater != 0)
 		pitchContourInterpolater->Interpolate(pitchContour);
@@ -112,6 +125,7 @@ void UtteranceBuilder::BuildPitchContour(UtteranceInfo* info)
 		pitchContourSmoother->Smooth(pitchContour);
 	if (pitchContourNormalizer != 0)
 		pitchContourNormalizer->Normalize(pitchContour, info);
+
 	utt->SetPitchContour(pitchContour);
 }
 
