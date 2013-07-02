@@ -24,23 +24,7 @@ Pitcher is yet another stand-alone application for pitch contour processing. Not
 ================================================================================
 <Settings and File format>
 
-1. What is "delta-feature"?
-
-Here we refer delta-features to the features that is the difference of the same feature of current and previous syllables, or can be derived by the linear combination of other features.
-
-For example, in pitch-related feature we have the maximum and minimum pitch in one syllable. One example of pitch delta-feature is the difference of maximum pitch of current and previous syllable. Another example is the pitch range of current syllable, which is the difference of maximum and minimum.
-
-* RECOMMENDATION: (important!!!)
-* If you work with the models that treat features as an independent questions, e.g. Decision Tree or Random Forest, we recomment you to include delta-features.
-* On the other hand, if you work with the models that can automatically linearly combine the features, e.g. Support Vector Machine (SVM) or Multi-Layer Perceptron (MLP), we recommend you not to include delta-features, because that only introduces redundent dimension into the feature space. Instead, you can for example concatenate the features from previous and following syllables.
-
-Note that trying to analyze feature importance while working with the latter catagory of models could be meaningless. The first reason is it is the combination of features that is taking effect, the weight of each feature does not directly relate to feature importance.
-
-For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look at them separately.
-
-Also, some traditional index of feature importance, such as entropy-related indices, are more correspondent the the criterion of Decision Tree-based models.
-
-2. REC file format
+1. REC file format
 
 For example, if we want to extract the feature from foo.wav and foo.f0, the REC file should look like this:
 
@@ -85,11 +69,13 @@ The following are some examples of the syllable time label:
 
         52600000 -1 -1 52700000
 
-3. How to get .f0 file?
+2. How to get .f0 file?
 
-.f0 files are extracted by ESPS, a tcl/tk based program developed by KTH. Execute the script "mfantest.tcl" with a "list.txt" in the same directory with all wave file paths inside, and .f0 and .frm files will be output to the directory of the wave files.
+.f0 files are extracted by the Snack Sound Toolkit, a tcl/tk based program developed by KTH. Go to http://www.speech.kth.se/snack/ for more information.
 
-4. Details of the pre-processing of pitch contour:
+Once you have installed Snack, execute the script "snackPitchExtraction.tcl" in test/ folder, with a "wavList" in the same directory listing all the paths of your wave files inside. And .f0 (pitch contour, what we need) and .frm (formant frequencies, what we don't need) files will be in the same directory as the wave files. Of course you can modify the input file list and output directory in tcl script for your needs.
+
+3. Details of the pre-processing of pitch contour:
 
 I assume that there are silences at the begging and end of utterance; and also the first and last unvoiced phoneme may possess pitch=0. Therefore, after a raw pitch contours is loaded, the following procedures are done in sequence:
 
@@ -98,7 +84,24 @@ I assume that there are silences at the begging and end of utterance; and also t
    (3) Smoothing (optional)
    (4) Normalization (optional): In this step, I refer to the time label information for the beginning/end silence. The beginning and end silences are directly set 0, and the remaining region is normalized. (i.e. the statistics for normalization is calculated within the region except beginning/end silence)
 
+4. What is "delta-feature"?
+
+Here we refer delta-features to the features that is the difference of the same feature of current and previous syllables, or can be derived by the linear combination of other features.
+
+For example, in pitch-related feature we have the maximum and minimum pitch in one syllable. One example of pitch delta-feature is the difference of maximum pitch of current and previous syllable. Another example is the pitch range of current syllable, which is the difference of maximum and minimum.
+
+* RECOMMENDATION: (important!!!)
+* If you work with the models that treat features as an independent questions, e.g. Decision Tree or Random Forest, we recomment you to include delta-features.
+* On the other hand, if you work with the models that can automatically linearly combine the features, e.g. Support Vector Machine (SVM) or Multi-Layer Perceptron (MLP), we recommend you not to include delta-features, because that only introduces redundent dimension into the feature space. Instead, you can for example concatenate the features from previous and following syllables.
+
+Note that trying to analyze feature importance while working with the latter catagory of models could be meaningless. The first reason is it is the combination of features that is taking effect, the weight of each feature does not directly relate to feature importance.
+
+For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look at them separately.
+
+Also, some traditional index of feature importance, such as entropy-related indices, are more correspondent the the criterion of Decision Tree-based models.
+
 ================================================================================
+
 <Reference>
 
 1. Feature set for disfluency detection:
