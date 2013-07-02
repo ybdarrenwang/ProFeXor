@@ -1,0 +1,144 @@
+ProFeXor extracts the prosodic features corresponding to each "Syllable". In the output 
+feature file, each line represents the extrated feature vector of one syllable. A "Syllable"
+we defined in ProFeXor includes:
+
+   (1) onset, nuclei, coda
+   (2) time labels and durations of onset, nuclei and coda,
+   (3) the pitch and energy contour within this Syllable,
+   (4) the boundary BEFORE this Syllable                    (important!!!)
+   (5) the pause (if exists) BEFORE this Syllable           (important!!!)
+
+Pitcher is a stand-alone application for pitch contour processing. Note you don't have to run
+Pitcher before ProFeXor, because the function of Pitcher is also embedded in ProFeXor.
+
+================================================================================
+<Installation>
+1. Run "make dir" to create folders
+2. Run "make profexor" to compile ProFeXor into executable
+3. Run "make pitcher" to complie Pitcher into executable
+4. Run "make test" to copy the executables into test folder
+*  Run "make" or "make all" to do all the above
+*  Run "make doc" if you have Doxygen
+
+================================================================================
+<Settings and File format>
+
+1. What is "delta-feature"?
+
+   Here we refer delta-features to the features that is the difference of the same feature of 
+   current and previous syllables, or can be derived by the linear combination of other 
+   features.
+
+   For example, in pitch-related feature we have the maximum and minimum pitch in one syllable.
+   One example of pitch delta-feature is the difference of maximum pitch of current and previous
+   syllable. Another example is the pitch range of current syllable, which is the difference of 
+   maximum and minimum.
+
+   RECOMMENDATION: (important!!!)
+
+     If you work with the models that treat features as an independent questions, e.g. Decision 
+     Tree or Random Forest, we recomment you to include delta-features.
+
+     On the other hand, if you work with the models that can automatically linearly combine the
+     features, e.g. Support Vector Machine (SVM) or Multi-Layer Perceptron (MLP), we recommend 
+     you not to include delta-features, because that only introduces redundent dimension into 
+     the feature space. Instead, you can for example concatenate the features from previous and 
+     following syllables.
+
+     Note that trying to analyze feature importance while working with the latter catagory of
+     models could be meaningless. The first reason is it is the combination of features that is
+     taking effect, the weight of each feature does not directly relate to feature importance. 
+
+     For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be
+     calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look
+     at them separately.
+
+     Also, some traditional index of feature importance, such as entropy-related indices, are more
+     correspondent the the criterion of Decision Tree-based models.
+
+2. REC file format
+
+   For example, if we want to extract the feature from foo.wav and foo.f0, the REC file should
+   look like this:
+
+   "foo.wav"
+   "foo.f0"
+   630000 1240000 3220000 3220000
+   3220000 4436666 6870000 6870000
+   6870000 7290000 9590000 9590000
+   ......
+   .
+
+   The first two lines are the wave and f0 files with quotation marks; the last line is simply 
+   a period; and the remaining lines are time labels, one line for one syllable. One REC file
+   can contain more than one utterance. 
+
+   The unit of time label follows the setting of HTK, which is "0.1 micro-second". And the frame 
+   shift of ProFeXor is 10ms, which means if you divide the time label by 100000, you will get the
+   frame index.
+
+   The following are some examples of the syllable time label:
+
+   [ Example-1: "plurk" ]
+
+   We see one "syllable" as the combination of "onset", "nuclei" and "coda".
+   Each row in .rec file must have 4 tokens, representing the 4 time boundaries.
+
+	    300000 800000 1600000 2000000 <- one row in .rec file
+		  |_______|______|_______|
+	         pl      ur      k
+		   (onset)(nuclei)(coda)
+
+   [ Example-2: "at" ]
+
+      If there's no onset, the 1st time label is set the same as the 2nd.
+
+	    2500000 2500000 3000000 3300000
+
+   [ Example-3: Chinese syllables]
+
+      If there's no coda, or for Chinese syllables, the 4th time label is set the same as the 3rd.
+
+        49700000 52300000 52600000 52600000
+
+   [ Example-4: "sp" or "sil"]
+
+      Short pause or silence are regarded as one syllable in .rec file. The 2nd and 3rd time label
+      must be "-1".
+
+        52600000 -1 -1 52700000
+
+3. How to get .f0 file?
+
+   .f0 files are extracted by ESPS, a tcl/tk based program developed by KTH.
+   Execute the script "mfantest.tcl" with a "list.txt" in the same directory
+   with all wave file paths inside, and .f0 and .frm files will be output
+   to the directory of the wave files.
+
+4. Details of the pre-processing of pitch contour:
+
+   I assume that there are silences at the begging and end of utterance; and also the first and
+   last unvoiced phoneme may possess pitch=0. Therefore, after a raw pitch contours is loaded, 
+   the following procedures are done in sequence:
+
+   (1) If the pitch>0, take logarithm; otherwise keep it 0.
+   (2) Interpolation (optional): In this step, I copy the first/last nonzero pitch value
+       forward/backward, so that the whole contour is nonzero.
+   (3) Smoothing (optional)
+   (4) Normalization (optional): In this step, I refer to the time label information for the 
+       beginning/end silence. The beginning and end silences are directly set 0, and the remaining
+	   region is normalized. (i.e. the statistics for normalization is calculated within the
+	   region except beginning/end silence)
+
+================================================================================
+<Reference>
+
+1. Feature set for disfluency detection:
+
+   Che-Kuang Lin, "New Appraoches for Detecting Edit Disfluencies in Transcribing Spontaneous
+   Mandarin Speech," Ph.D. thesis, National Taiwan University, 2009.
+
+2. SRI pitch contour stylization:
+
+   K. Sonmez, E. Shriberg, L. Heck, and M. Weintraub, "Modeling dynamic prosodic variation for
+   speaker verification," in Proc. ICSLP, 1998, pp. 3189~3192.
