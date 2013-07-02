@@ -196,15 +196,13 @@ void LoadF0(string file_name, vector<double>& data)
 	}
 	cout<<"Reading "<<file_name<<"......"<<endl;
 	
-	double f1=0,f2=0,f3=0,f4=0;
-	string buf;
-
-	while(!getLine(in_f0,buf))
+	string line;
+	while(!getLine(in_f0, line))
 	{
 		// Read formatted data from a string.
-		sscanf(buf.c_str(),"%lf %lf %lf %lf",&f1,&f2,&f3,&f4);
-		if(f1>1000 ||(f1>0 && f1<1e-5))
-			cout<<"warning: abnormal f0 value: "<<buf<<endl;
-		data.push_back(f1);
+		float f0 = atof(split(line)[0].c_str());
+		if(f0>1000 ||(f0>0 && f0<1e-5))
+			cout<<"warning: abnormal f0 value: "<<line<<endl;
+		data.push_back(f0);
 	}
 }

@@ -1,11 +1,6 @@
 #!/bin/bash
 
 echo ""
-echo "====== Extract raw pitch contour ======"
-echo ""
-./snackPitchExtraction.tcl
-
-echo ""
 echo "====== Execute Pitcher with default settings ======"
 echo ""
 ./Pitcher -i f0List -o processedF0

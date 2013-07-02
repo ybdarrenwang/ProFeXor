@@ -27,7 +27,7 @@ Pitcher is yet another stand-alone application for pitch contour processing. Not
 
 1. REC file format
 
-For example, if we want to extract the feature from foo.wav and foo.f0, the REC file should look like this:
+For example, if we want to extract the feature from wave file "foo.wav" and raw pitch file "foo.f0", the REC file should look like this:
 
    "foo.wav"
    "foo.f0"
@@ -70,11 +70,13 @@ The following are some examples of the syllable time label:
 
         52600000 -1 -1 52700000
 
-2. How to get .f0 file?
+2. Raw pitch file format
 
-.f0 files are extracted by the Snack Sound Toolkit, a tcl/tk based program developed by KTH. Go to http://www.speech.kth.se/snack/ for more information.
+In the raw pitch file, each line represents 1 frame, and the first token of each line (followed by a whitespace) represents its pitch (F0) value in Hertz. The setting of frame shift also follows the default setting of HTK, which is 10ms.
 
-Once you have installed Snack, execute the script "snackPitchExtraction.tcl" in test/ folder, with a "wavList" in the same directory listing all the paths of your wave files inside. And .f0 (pitch contour, what we need) and .frm (formant frequencies, what we don't need) files will be in the same directory as the wave files. Of course you can modify the input file list and output directory in tcl script for your needs.
+In the test/ folder I offered an example of raw pitch file, which is extracted by the Snack Sound Toolkit, a tcl/tk based program developed by KTH. Visit http://www.speech.kth.se/snack/ for more information.
+
+If you have installed Snack, you can try to extract raw pitch by executing the script "snackPitchExtraction.tcl" in test/ folder, with a "wavList" in the same directory listing all the paths of your wave files inside. And it will generate .f0 and .frm files in the same directory as the wave files. The .f0 file is the raw pitch file we need. Of course you can modify the input file list and output directory in tcl script for your needs.
 
 3. Details of the pre-processing of pitch contour:
 
