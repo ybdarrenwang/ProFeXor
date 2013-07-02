@@ -21,10 +21,10 @@ VPATH = src/AcousticUnit:src/UtteranceBuilder:src/FeatureExtractor:src/Profexor:
 vpath %.o $(OBJfolder)/$(MACHINE)
 
 # files
-ProFeXorSRC = Syllable.cpp Utterance.cpp DurationFeXor.cpp EnergyFeXor.cpp PauseFeXor.cpp PitchFeXor.cpp SRIPitchFeXor.cpp SRIStylizer.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp wavIO.cpp Config.cpp FeatureSelector.cpp Profexor.cpp SelectorKimchy.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp UtteranceBuilder.cpp ProFeXor.cpp
+ProFeXorSRC = Syllable.cpp Utterance.cpp DurationFeXor.cpp EnergyFeXor.cpp PauseFeXor.cpp PitchFeXor.cpp SRIPitchFeXor.cpp SRIStylizer.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp wavIO.cpp Config.cpp FeatureSelector.cpp Profexor.cpp SelectorKimchy.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp UtteranceBuilder.cpp main_ProFeXor.cpp
 ProFeXorOBJ = $(addprefix obj/$(MACHINE)/,$(ProFeXorSRC:.cpp=.o))
 
-PitcherSRC = Pitcher.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp wavIO.cpp
+PitcherSRC = Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp wavIO.cpp main_Pitcher.cpp
 PitcherOBJ = $(addprefix obj/$(MACHINE)/,$(PitcherSRC:.cpp=.o))
 
 # rules
