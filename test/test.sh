@@ -3,7 +3,7 @@
 echo ""
 echo "====== Execute Pitcher with default settings ======"
 echo ""
-./Pitcher -i f0List -o processedF0
+./Pitcher -i f0List
 
 echo ""
 echo "====== Execute ProFeXor with default settings ======"

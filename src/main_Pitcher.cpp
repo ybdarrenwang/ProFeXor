@@ -31,7 +31,8 @@ void usage(const char *prog, const string &normalizeMode, const int &w_s, const 
 		<< "Perform pitch contour interpolation, smoothing and normalization.\n\n"
 		<< "Usage: " << prog << " [options] ...\n"
 		<< "Options:\n"
-		<< "  -i file_list               list of .f0 file\n"
+		<< "  -i file_list               each row are one input pitch file and its corresponding output\n"
+		<< "                             pitch file, separated by whitespace\n"
 	    << "  -pitchNorm m [window_size] set pitch contour normalization mode to m     (default: " << normalizeMode << ")\n"
 	    << "                             utt: subtract the mean pitch of the utterance\n"
 	    << "                             win: subtract the mean pitch within the range of context window\n"
@@ -42,13 +43,12 @@ void usage(const char *prog, const string &normalizeMode, const int &w_s, const 
 	    << "  -pitchInterpolate i        set pitch contour interpolation mode to i     (default: " << interpolateMode << ")\n"
 	    << "                             spline: Cubic Spline interpolation\n"
 	    << "                             linear: Linear interpolation\n"
-		<< "  -o out_dir                 output directory of processed pitch contour\n"
 	    << "\n"
 	    << endl;
 	exit(1);
 }
 
-void ReadArguments(int argc, char **argv, string &in_list, string &outFolder, string &interpolateMode, string &normalizeMode, int &w_n, int &w_s)
+void ReadArguments(int argc, char **argv, string &in_list, string &interpolateMode, string &normalizeMode, int &w_n, int &w_s)
 {
 	// read arguments
 	if( argc < 2 )
@@ -72,12 +72,6 @@ void ReadArguments(int argc, char **argv, string &in_list, string &outFolder, st
 			i++;
 			in_list = Args[i];
 			cout<<"Input file list: "<<in_list<<endl;
-		}
-		else if( Args[i] == "-o" && Args.size() > i )
-		{
-			i++;
-			outFolder = Args[i];
-			cout<<"Output folder: "<<outFolder<<endl;
 		}
 		else if( Args[i] == "-pitchNorm" && Args.size() > i )
 		{
@@ -112,7 +106,7 @@ void ReadArguments(int argc, char **argv, string &in_list, string &outFolder, st
 */
 int main(int argc, char **argv)
 {	
-	string in_list = "", outFolder = "";
+	string in_list = "";
 	ContourSmoother* pitchContourSmoother=0;
 	ContourInterpolater* pitchContourInterpolater=0;
 	Normalizer* pitchContourNormalizer=0;
@@ -122,7 +116,7 @@ int main(int argc, char **argv)
 	int w_n = 50, w_s = 0;
 
 	// Load arguments
-	ReadArguments(argc, argv, in_list, outFolder, interpolateMode, normalizeMode, w_n, w_s);
+	ReadArguments(argc, argv, in_list, interpolateMode, normalizeMode, w_n, w_s);
 
 	// initialize pitch processors
 	if (w_s > 0)	
@@ -181,16 +175,15 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	outFolder += "/";
-	mkdir(outFolder.c_str(), MY_MASK);
-
 	// Begin processing
 	vector<double> pitchContour;
 	UtteranceInfo info;
-	string f0File;
-	while(!getLine(ifs_list, f0File))
+	string line;
+	vector<string> ioFiles;
+	while(!getLine(ifs_list, line))
 	{
-		LoadF0(f0File, pitchContour);
+		ioFiles = split(line);
+		LoadF0(ioFiles[0], pitchContour);
 
 		// create fake utterance information
 		vector<int> fakeTimeLabel(4, 0);
@@ -214,15 +207,14 @@ int main(int argc, char **argv)
 			pitchContourNormalizer->Normalize(pitchContour, &info);
 
 		// output
-		string f0File_new = outFolder+split(f0File, "/").back();
 		ofstream ofs_f0;
-		if (!openFile(ofs_f0,f0File_new))
+		if (!openFile(ofs_f0, ioFiles[1]))
 		{
-			cerr<<"Warning: cannot open "<<f0File_new<<endl;
+			cerr<<"Warning: cannot open "<<ioFiles[1]<<endl;
 			return 1;
 		}
 
-		cout<<"Writing "<<f0File_new<<"......"<<endl;
+		cout<<"Writing "<<ioFiles[1]<<"......"<<endl;
 		for (int i=0; i<pitchContour.size(); i++)
 			ofs_f0<<pitchContour[i]<<"\n";
 		ofs_f0.close();
