@@ -1,0 +1,227 @@
+\documentclass[12pt]{article}
+\usepackage{setspace, indentfirst, graphicx, enumerate, authblk, hyperref}
+\usepackage[vmargin=3.18cm,hmargin=2.54cm]{geometry}
+\sloppy	% better line breaks
+\title{ProFeXor -- A ``Pro''sodic ``Fe''ature e``X''tract``or''}
+\author{Yow-Bang Wang\\
+\texttt{piscesfantasy@gmail.com}}
+\affil{Graduate Institute of Electrical Engineering,\\
+National Taiwan University (NTU),\\
+Taipei, Taiwan.}
+
+\begin{document}
+\maketitle
+
+{\footnotesize
+\noindent
+Copyright (c) 2013, Yow-Bang Wang\\
+All rights reserved.\\
+\\
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\\
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\\
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\\
+3. Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\\
+\\
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\\
+}
+
+\section*{Developed by:}
+\noindent
+Yow-Bang (Darren) Wang, Graduate Institute of Electrical Engineering, NTU.\\
+
+\section{Introduction}
+
+ProFeXor ("Pro"sodic "Fe"ature e"X"tract"or") is an application that extracts prosodic features from speech wave files based on corresponding raw pitch contours and time labels. A set of prosodic features will be extracted for each ``syllable''. The defition of one ``syllable'' in ProFeXor includes:
+\begin{enumerate}
+\item onset, nuclei, coda
+\item time labels and durations of onset, nuclei and coda,
+\item the pitch and energy contour within this syllable,
+\item the boundary BEFORE this syllable,
+\item the pause (if exists) BEFORE this syllable
+\end{enumerate}
+It is also possible for ProFeXor to extract features based on units other than syllable, if the input time labels are manipulated correspondingly. Details will be explained in Section \ref{sec:trick}.
+
+I also created another stand-alone application called ``Pitcher'' for pitch contour pre-processing. Its functions are described in Section \ref{sec:contour}. Note you do not have to run Pitcher before ProFeXor, for the functions of Pitcher are already embedded in ProFeXor.
+
+\section{Installation}
+
+\begin{enumerate}
+\item Run "make dir" to create folders
+\item Run "make profexor" to compile ProFeXor into executable
+\item Run "make pitcher" to complie Pitcher into executable
+\item Run "make test" to copy the executables into test folder
+\item Run "make" or "make all" to do all the above
+\item Run "make doc" to compile PDF manual
+\item Run "make doxygen" to create HTML pages of code structure (if you have installed Doxygen)
+\end{enumerate}
+
+\section{Settings and I/O File Format}
+
+\subsection{Input raw pitch contour}
+
+We haven't had a built-in pitch extractor for ProFeXor, which means you need to extract the raw pitch contours beforehand if you wish to extract pitch-related features with ProFeXor. In the raw pitch file, each line represents 1 frame, and ProFeXor/Pitcher only reads in the first token of each line (separated by whitespace) as the pitch (F0) value in Hertz. The setting of frame shift follows the default setting of HTK, which is 10ms.
+
+In the test folder I offered an example of raw pitch file, which is extracted by the Snack Sound Toolkit, a tcl/tk based program developed by KTH. Visit \url{http://www.speech.kth.se/snack/} for more information.
+
+If you have installed Snack, you can try to extract raw pitch by executing the script "snackPitchExtraction.tcl" in test folder, with a "wavList" in the same directory listing all the paths of your wave files inside. And it will generate .f0 and .frm files in the same directory as the wave files. The .f0 file is the raw pitch file we need. Of course you can modify the input file list and output directory in tcl script for your needs.
+
+\subsection{Input time label}
+\label{sec:timelabel}
+
+The basic unit of feature extraction of ProFeXor is essentially ``syllable''. In our definition, a syllable is consisted of ``onset'' (unvoiced consonants in the beginning), ``nuclei'' (vowels or voiced consonants in the middle) and ``coda'' (unvoiced consonants at the end). In other words, the nuclei is the part of syllable that possesses pitch contour. For languages like English it's sometimes hard to decide which unvoiced part belongs to which syllable (e.g. ``hacker'' -- ha-cker or hack-er?). On the other hand, for languages like Mandarin Chinese or Japanese, syllables are consisted of only onset and nuclei. In these cases there's no trouble for humans to identify the boundaries of these sub-syllable units.
+
+Table \ref{tab:syllable} gives an (made-up) example of the time labels of an utterance saying ``Look at her''. We represent each syllable with 4 numbers in one line, separated with whitespace. The 4 numbers are the times of the 4 boundaries of onset-nuclei-coda. Following the settings of HTK Toolkit, the unit of time label is ``0.1 micro-second'', and the frame shift is 10 ms. That means if you divide the time label by 100000, you will get the frame index. The other rules of time labeling are:
+\begin{enumerate}
+\item If there's no onset, the 1st time label is set the same as the 2nd.
+\item If there's no coda, like for Mandarin Chinese and Japanese, the 4th time label is set the same as the 3rd.
+\item Short pause or silence are regarded as one syllable. The 1st and 4th time label are the beginning and end time of the short pause or silence, while the 2nd and 3rd time label must be "-1".
+\end{enumerate}
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:syllable} {\it Time labeling rules of ProFeXor, illustrated with a made-up example of an utterance ``Look at her''.}}
+\vspace{2mm}
+\centerline{
+\begin{tabular}{|c||c|c|c|l|}
+\hline
+Syllable&Onset&Nuclei&Coda&Time Label\\
+\hline
+\hline
+$($silence$)$&N$/$A&N$/$A&N$/$A&0 -1 -1 1000000\\
+\hline
+Look&l&oo&k&1000000 1500000 3600000 4000000\\
+\hline
+at&N$/$A&a&t&4000000 4000000 5500000 6100000\\
+\hline
+her&h&er&N$/$A&6100000 7200000 9000000 9000000\\
+\hline
+$($silence$)$&N$/$A&N$/$A&N$/$A&9000000 -1 -1 100000000\\
+\hline
+\end{tabular}}
+\end{table}
+
+Now say we want to extract the feature from the wave file "foo.wav" and raw pitch file "foo.f0" corresponding to the utterance ``Look at her''. The content of the input time label file should look like Table \ref{tab:timelabel}. The first two lines are the wave and raw pitch files with quotation marks; the last line is simply a period; and the remaining lines are time labels, one line for one syllable. Note that one file can contain more than one utterance. Just keep listing another wave and f0 files after the line of period.
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:timelabel} {\it The content of the input time label file for the utterance ``Look at her'' for syllable-level feature extraction.}}
+\vspace{2mm}
+\centerline{
+\begin{tabular}{|l|}
+\hline
+"foo.wav"\\
+"foo.f0"\\
+0 -1 -1 1000000\\
+1000000 1500000 3600000 4000000\\
+4000000 4000000 5500000 6100000\\
+6100000 7200000 9000000 9000000\\
+9000000 -1 -1 100000000\\
+.\\
+\hline
+\end{tabular}}
+\end{table}
+
+\subsection{Output file format}
+ 
+As illustrated in Table \ref{tab:feature}, the output feature file format is similar to the input time label file -- The first two lines are the wave and f0 files with quotation marks; the last line is simply a period; and the remaining lines are the extrated feature vectors, one line for one syllable.
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:feature} {\it An example of the output feature file of ProFeXor.}}
+\vspace{2mm}
+\centerline{
+\begin{tabular}{|l|}
+\hline
+"foo.wav"\\
+"foo.f0"\\
+-0.0498841 -0.208016 -0.0488966 (......)\\
+(......)\\
+.\\
+\hline
+\end{tabular}}
+\end{table}
+
+If the argument ``-d'' is also used, the ProFeXor will also output a file listing all the definition of the extracted features. The format of feature definition looks like $<a::b[c]> d$, where $a$ is the type of feature (pitch, duration, energy etc.); $b$ is its abbreviative ID; the integer $c$ means this feature is extracted from the $c$-th segments of nuclei, as will explained in Section \ref{sec:segment}; and $d$ is its detailed description. 
+
+\section{Feature Extraction}
+
+\subsection{Pre-processing of pitch contour}
+\label{sec:contour}
+
+The raw pitch contour will be pre-processed in ProFeXor before calcluating pitch-related features. Since these pre-processings are also very useful for purposes such as linguistic analysis or pitch-embedded speech recognition, I created another stand-alone application called Pitcher which performs only these pre-processing functions.
+
+I assume that there are silences in the beginning and end of utterance; and also the first and last unvoiced phoneme may possess pitch=0. Therefore, after a raw pitch contours is loaded, the following procedures are done in sequence:
+
+\begin{enumerate}
+\item{If the pitch$>0$, take logarithm; otherwise keep it 0.}
+\item{Interpolation (optional):}
+
+Perform linear or Cubic Spline interpolation. I also copy the first/last nonzero pitch value forward/backward, so that the whole contour is nonzero.
+
+\item{Smoothing (optional)}
+\item{Normalization (optional):}
+
+In this step, I refer to the time label information for the beginning/end silence. The pitch values within the beginning and end silences are directly set as 0; And the remaining region is normalized using Mean Subtraction or Mean-Variance Normalization. Note the statistics for normalization is calculated within the region except the beginning and end silences.
+\end{enumerate}
+
+\subsection{SRI Stylization of pitch contour}
+
+The so-called ``SRI Stylization'' of pitch contour in ProFeXor was implemented based on \cite{sri}. In short, we approximent the pitch contour between two pauses with $1\sim3$ straight lines, depending on the duration of each contour. The approximation is the Minimum Mean-Square Error (MMSE) one. Such stylization is usually adopted when only the prosody of a longer duration is considered, e.g. in tasks such as disfluency detection \cite{disfluency}.
+
+\subsection{Delta-features}
+
+Here we refer delta-features to the features that is the difference of the same feature of current and previous syllables, or can be derived by the linear combination of other features.
+
+For example, in pitch-related feature we have the maximum and minimum pitch in one syllable. One example of pitch delta-feature is the difference of maximum pitch of current and previous syllable. Another example is the pitch range of current syllable, which is the difference of maximum and minimum.
+
+\subsection{Segmental nuclei features}
+\label{sec:segment}
+
+For some of the pitch and energy features, if the argument ``-numOfSegment n'' is entered, the ProFeXor would equally partition each nuclei into n segments, and extract features from each of the segments. For tasks such as Mandarin tone recognition, the number of segments is often set to be 2 or 3. In this way more detailed changes of pitch or energy can be observed.
+
+\section{Tips and Tricks}
+\label{sec:trick}
+
+\subsection{Extracting features based on units other than syllable}
+
+It is also possible to extract features based on some acoustic units other than syllables using ProFeXor. Again we use the example of the utterance ``Look at her''. As shown in Table \ref{tab:wordlevel}, if somehow you decided to see the two words ``Look at'' as one unit, and the whole word ``her'' as the other, simply cover the duration of each unit with the 2nd and 3rd time labels, and set the duration of onsets and codas to 0.
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:wordlevel} {\it The content of the input time label file for the utterance ``Look at her'' when the features of two units, ``Look at'' and ``her'', are extracted.}}
+\vspace{2mm}
+\centerline{
+\begin{tabular}{|l|}
+\hline
+"foo.wav"\\
+"foo.f0"\\
+0 -1 -1 1000000\\
+1000000 1000000 6100000 6100000\\
+6100000 6100000 9000000 9000000\\
+9000000 -1 -1 100000000\\
+.\\
+\hline
+\end{tabular}}
+\end{table}
+
+First, as long as you turn on the pitch contour interpolation option, as described in Section \ref{sec:contour}, you don't have to worry about pitch$=0$ within the duration of each unit. Second, there are in fact only 4 features related to onset and coda, which are the durations and normalized durations respectively. You can just look into the feature definition and exclude these features.
+
+\subsection{Recommendations on using ProFeXor with Machine Learning Approaches}
+
+If you work with the models that treat features as an independent questions, e.g. Decision Tree or Random Forest, we recomment you to include delta-features.
+
+On the other hand, if you work with the models that can automatically linearly combine the features, e.g. Support Vector Machine (SVM) or Multi-Layer Perceptron (MLP), we recommend you not to include delta-features, because that only introduces redundent dimension into the feature space. Instead, you can for example concatenate the features from previous and following syllables.
+
+Note that trying to analyze feature importance while working with the latter catagory of models could be meaningless. The first reason is it is the combination of features that is taking effect, the weight of each feature does not directly relate to feature importance.
+
+For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look at them separately.
+
+Also, some traditional index of feature importance, such as entropy-related indices, are more correspondent the the criterion of Decision Tree-based models.
+
+
+\begin{thebibliography}{99}
+\bibitem{sri} K. Sonmez, E. Shriberg, L. Heck, and M. Weintraub, "Modeling dynamic prosodic variation for speaker verification," in Proc. ICSLP, 1998, pp. 3189~3192.
+\bibitem{disfluency} Che-Kuang Lin, "New Appraoches for Detecting Edit Disfluencies in Transcribing Spontaneous Mandarin Speech," Ph.D. thesis, National Taiwan University, 2009.
+\end{thebibliography}
+
+\end{document}

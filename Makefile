@@ -6,7 +6,7 @@ DOXYGENCFG = $(DOC)/doxygen.cfg
 CDIR = cd
 MKDIR = mkdir -p
 CP = cp
-RM = rm -r -f
+RM = rm -f
 
 # folders
 DOC = doc
@@ -48,8 +48,13 @@ test:
 
 .PHONY : doc
 doc:
-	$(DOXYGEN) $(DOXYGENCFG)
+	pdflatex -output-directory=${DOC} $(DOC)/manual
+
+.PHONY : doxygen
+doxygen:
+	${DOXYGEN} $(DOXYGENCFG)
 
 .PHONY : clean
 clean:
-	$(RM) $(OBJfolder)/$(MACHINE)
+	$(RM) $(ProFeXorOBJ)
+	$(RM) $(PitcherOBJ)

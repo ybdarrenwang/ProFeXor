@@ -33,7 +33,7 @@ void Config::Usage( const char *prog )
 	     << "options:\n"
 	     << "  -S PSDXEF                  select feature sets to be calculated\n"
 	     << "                             P: log-f0\n"
-	     << "                             S: SRI regularized log-f0\n"
+	     << "                             S: SRI-stylized log-f0\n"
 	     << "                             D: syllable duration\n"
 	     << "                             X: pause duration, and the relations among pauses and syllables\n"
 	     << "                             E: log-energy\n"
