@@ -3,6 +3,7 @@
 PiecewiseLinear::PiecewiseLinear(int tmp_num_seg)
 {
 	num_seg = tmp_num_seg;
+	
 	knots = new int[num_seg+1];
 	coeff = new double*[num_seg];
 	for (int i=0; i<num_seg; i++)
@@ -89,11 +90,13 @@ void PiecewiseLinear::OptApprox(vector<double>& x)
 	tmpCoeff = new double*[num_seg];
 	for (int i=0; i<num_seg; i++)
 		tmpCoeff[i] = new double[2];
-	tmpLastSegCoeff = new double*[x.size()];
-	for (int i=0; i<x.size(); i++)
+
+	tmpLastSegCoeff = new double*[x.size()+1];
+	for (int i=0; i<=x.size(); i++)
+	{
 		tmpLastSegCoeff[i] = new double[3];
-	for (int i=0; i<x.size(); i++)
 		tmpLastSegCoeff[i][0] = -1;
+	}
 
 	// run
 	knots[0] = 0;
@@ -106,13 +109,13 @@ void PiecewiseLinear::OptApprox(vector<double>& x)
 	for (int i=0; i<num_seg; i++)
 		delete [] tmpCoeff[i];
 	delete [] tmpCoeff;
-	for (int i=0; i<x.size(); i++)
+	for (int i=0; i<=x.size(); i++)
 		delete [] tmpLastSegCoeff[i];
 	delete [] tmpLastSegCoeff;
 
 	if (sse >= 1e38)
 	{
-		cerr<<"Error: fail to find optimal piecewise linear function"<<endl;
+		cerr<<"[Error] fail to find optimal piecewise linear function"<<endl;
 		exit(1);
 	}
 }

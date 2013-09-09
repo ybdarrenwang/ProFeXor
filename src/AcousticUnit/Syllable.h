@@ -12,7 +12,7 @@ class Syllable : public AcousticUnit
 		{
 			if (b==c)
 			{
-				cerr<<"Error: nuclei duration should not be 0 ("<<a<<" "<<b<<" "<<c<<" "<<d<<")"<<endl;
+				cerr<<"[Error] nuclei duration should not be 0 ("<<a<<" "<<b<<" "<<c<<" "<<d<<")"<<endl;
 				exit(1);
 			}
 			beginTime = a;

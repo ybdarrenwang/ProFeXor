@@ -25,7 +25,7 @@ vector<double> PiecewiseLinearApprox(vector<double> rawpitch)
 
 void SRIStylizer::Stylize(Utterance* u)
 {
-	cout<<"Stylizing pitch contour with SRI approach"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	vector<double> tmpPitchContour = u->GetPitchContour();
 	int pitchContourLength = tmpPitchContour.size();

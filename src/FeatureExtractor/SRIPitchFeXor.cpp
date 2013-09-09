@@ -8,7 +8,8 @@
  */
 void SRIPitchFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool extractDelta)
 {
-	cout<<"=== Extracting SRI-stylized pitch features ==="<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	vector<double> backupPitchContour = u->GetPitchContour();
 	stylizer->Stylize(u);
 	InitializeFeature(u->GetNumberOfSyllables());

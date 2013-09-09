@@ -1,6 +1,8 @@
 #ifndef CONTOURINTERPOLATER_H
 #define CONTOURINTERPOLATER_H
 
+#include "debug.h"
+
 using namespace std;
 
 class ContourInterpolater

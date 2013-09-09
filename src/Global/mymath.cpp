@@ -66,7 +66,7 @@ double Vector_InnerProd(vector<double>& a, vector<double>& b)
 
 	if (a.size() != b.size())
 	{
-		cerr<<"Error: vector size does not match"<<endl;
+		cerr<<"[Error] vector size does not match"<<endl;
 		exit(1);
 	}
 
@@ -82,7 +82,7 @@ void Vector_Sum(vector<double>& a, vector<double>& b, vector<double>& answer)
 
 	if (a.size() != b.size())
 	{
-		cerr<<"Error: vector size does not match"<<endl;
+		cerr<<"[Error] vector size does not match"<<endl;
 		exit(1);
 	}
 
@@ -94,7 +94,7 @@ void Vector_Sum(vector<double>& a, vector<double>& b)
 {
 	if (a.size() != b.size())
 	{
-		cerr<<"Error: vector size does not match"<<endl;
+		cerr<<"[Error] vector size does not match"<<endl;
 		exit(1);
 	}
 
@@ -200,7 +200,7 @@ double getSlope(vector<double>& x, vector<double>& y)
 {
 	if (x.size() != y.size())
 	{
-		cerr<<"Error: size of x and y for slope calculation is different"<<endl;
+		cerr<<"[Error] size of x and y for slope calculation is different"<<endl;
 		exit(1);
 	}
 	if (x.size() <= 1) return 0;
@@ -288,7 +288,7 @@ double getCov(vector<double>& x, vector<double>& y, double x_mean, double y_mean
 
 	if (x.size() != y.size())
 	{
-		cerr<<"Error: sizes of vectors for covariance calculation unequal"<<endl;
+		cerr<<"[Error] sizes of vectors for covariance calculation unequal"<<endl;
 		exit(1);
 	}
 
@@ -434,7 +434,7 @@ double SquareError(vector<double>& x, vector<double>& y, double* coeff)
 {
 	if (x.size() != y.size())
 	{
-		cerr<<"Error: sizes of vectors x and y are different"<<endl;
+		cerr<<"[Error] sizes of vectors x and y are different"<<endl;
 		exit(1);
 	}
 
@@ -632,7 +632,6 @@ double avgMaxPitch(double* pitch, int Length, const int p)
 			buffer[j-1] = pitch[k];
 		}
 	}
-	//cout<<endl;	
 	double average = 0;
 	for(k=0;k < p; k++)
 	{
@@ -671,7 +670,6 @@ double avgMinPitch(double* pitch, int Length, const int p)
 			buffer[j-1] = pitch[k];
 		}
 	}
-	//cout<<endl;
 	double average = 0;
 	for(k=0;k < p; k++){
 		average += buffer[k];
@@ -742,7 +740,6 @@ void Legendre_coeff(vector<double>& pch, double* a)
 	int N = pch.size();
 	vector<double> phi_1, phi_2, phi_3; // Legendre polynomial
 	a[0] = a[1] = a[2] = 0; // Legendre coefficient
-cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<endl;
 	Legendre_poly_1(pch, phi_1);
 	Legendre_poly_2(pch, phi_2);
 	Legendre_poly_3(pch, phi_3);
@@ -752,13 +749,10 @@ cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<endl;
 		a[0] += phi_1[i]*pch[i];
 		a[1] += phi_2[i]*pch[i];
 		a[2] += phi_3[i]*pch[i];
-cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<endl;
 	}
 	a[0] = a[0]/N;
 	a[1] = a[1]/N;
 	a[2] = a[2]/N;
-cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<endl;
-cout<<"finish legendre"<<endl;
 	phi_1.clear();
 	phi_2.clear();
 	phi_3.clear();

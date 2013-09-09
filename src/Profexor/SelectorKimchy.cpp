@@ -6,7 +6,7 @@ SelectorKimchy::SelectorKimchy()
 	myFeatureSet = vector<int>(tmpFeatureSet, tmpFeatureSet+sizeof(tmpFeatureSet)/sizeof(int));
 }
 
-void SelectorKimchy::GetExtractors(vector<FeatureExtractor*>& myExtractors)
+void SelectorKimchy::InstallExtractors(vector<FeatureExtractor*>& myExtractors)
 {
 	myExtractors.push_back(new PitchFeXor(0)); // 18 features
 	myExtractors.push_back(new SRIPitchFeXor(0)); // 18 features

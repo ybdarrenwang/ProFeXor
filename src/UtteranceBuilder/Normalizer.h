@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "UtteranceInfo.h"
+#include "debug.h"
 
 using namespace std;
 

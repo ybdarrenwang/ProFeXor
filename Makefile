@@ -1,6 +1,6 @@
 # command and config
-GPP = g++
-GPPFlag = -O2 -Wall -static
+CXX = g++
+CXXFLAGS = -O2 -Wall -static -pthread
 DOXYGEN = doxygen
 DOXYGENCFG = $(DOC)/doxygen.cfg
 CDIR = cd
@@ -21,26 +21,29 @@ VPATH = src/AcousticUnit:src/UtteranceBuilder:src/FeatureExtractor:src/Profexor:
 vpath %.o $(OBJfolder)/$(MACHINE)
 
 # files
-ProFeXorSRC = Syllable.cpp Utterance.cpp DurationFeXor.cpp EnergyFeXor.cpp PauseFeXor.cpp PitchFeXor.cpp SRIPitchFeXor.cpp SRIStylizer.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp wavIO.cpp Config.cpp FeatureSelector.cpp Profexor.cpp SelectorKimchy.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp UtteranceBuilder.cpp main_ProFeXor.cpp
+ProFeXorSRC = thread_util.cpp Phd.cpp Syllable.cpp Utterance.cpp DurationFeXor.cpp EnergyFeXor.cpp PauseFeXor.cpp PitchFeXor.cpp SRIPitchFeXor.cpp SRIStylizer.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp wavIO.cpp Config.cpp FeatureSelector.cpp Profexor.cpp SelectorKimchy.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp UtteranceBuilder.cpp main_ProFeXor.cpp
 ProFeXorOBJ = $(addprefix obj/$(MACHINE)/,$(ProFeXorSRC:.cpp=.o))
 
-PitcherSRC = Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp wavIO.cpp main_Pitcher.cpp
+PitcherSRC = thread_util.cpp Matrix.cpp mymath.cpp PiecewiseLinear.cpp Spline.cpp util.cpp CubicSplineInterpolater.cpp LinearInterpolater.cpp MaxSubtraction.cpp MeanSubtraction.cpp MeanVarNorm.cpp MovingWindowMeanSub.cpp wavIO.cpp main_Pitcher.cpp
 PitcherOBJ = $(addprefix obj/$(MACHINE)/,$(PitcherSRC:.cpp=.o))
 
 # rules
 all: dir profexor pitcher test
 
+debug: CXX += -DDEBUG -g
+debug: dir profexor pitcher test
+
 dir:
 	mkdir -p $(OBJfolder)/$(MACHINE) $(BIN)/$(MACHINE)
 
 profexor: $(ProFeXorOBJ)
-	$(GPP) $(Include) $(GPPFlag) -o $(BIN)/$(MACHINE)/ProFeXor $^
+	$(CXX) $(Include) $(CXXFLAGS) -o $(BIN)/$(MACHINE)/ProFeXor $^
 
 pitcher: $(PitcherOBJ)
-	$(GPP) $(Include) $(GPPFlag) -o $(BIN)/$(MACHINE)/Pitcher $^
+	$(CXX) $(Include) $(CXXFLAGS) -o $(BIN)/$(MACHINE)/Pitcher $^
 
 obj/$(MACHINE)/%.o: %.cpp
-	$(GPP) $(Include) -c -g -o $@ $<
+	$(CXX) $(Include) -c -o $@ $<
 
 .PHONY : test
 test:
@@ -48,7 +51,7 @@ test:
 
 .PHONY : doc
 doc:
-	pdflatex -output-directory=${DOC} $(DOC)/manual
+	pdflatex -output-directory=${DOC} $(DOC)/manual; pdflatex -output-directory=${DOC} $(DOC)/manual
 
 .PHONY : doxygen
 doxygen:

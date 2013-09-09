@@ -2,7 +2,8 @@
 
 void EnergyFeXor::InitializeFeature(int numOfSyllable)
 {
-	cout<<"Initializing features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	begin = vector<double>(numOfSyllable, 0);
 	end = vector<double>(numOfSyllable, 0);
 	slopeBegin = vector<double>(numOfSyllable, 0);
@@ -23,7 +24,8 @@ void EnergyFeXor::InitializeFeature(int numOfSyllable)
 
 void EnergyFeXor::InitializeDeltaFeature(int numOfSyllable)
 {
-	cout<<"Initializing delta features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	dBegin = vector<double>(numOfSyllable, 0);
 	dEnd = vector<double>(numOfSyllable, 0);
 	dbe = vector<double>(numOfSyllable, 0);
@@ -51,7 +53,7 @@ void EnergyFeXor::InitializeDeltaFeature(int numOfSyllable)
 
 void EnergyFeXor::GetFeature(Utterance* u)
 {
-	cout<<"Get energy features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	Syllable* syl;
 	vector<double> sylEnergyContour;
@@ -90,7 +92,7 @@ void EnergyFeXor::GetFeature(Utterance* u)
 		{
 			if(nucleiDuration < 3)
 			{
-				cerr<<"Warning: duration of nuclei is too short to break into "<<numOfSegment<<" segments, will calculate the features of whole contour as of each contour-segment"<<endl;
+				DUMP("[Warning] duration of nuclei is too short to break into segments, will calculate the features of whole contour as of each contour-segment");
 				for (int seg=0; seg<numOfSegment; seg++)
 					segment[s][seg] = avg[s];
 			}
@@ -115,7 +117,7 @@ void EnergyFeXor::GetFeature(Utterance* u)
 
 void EnergyFeXor::GetDeltaFeature(int numOfSyllable)
 {
-	cout<<"Get energy delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numOfSyllable; s++)
 	{
@@ -162,7 +164,7 @@ void EnergyFeXor::GetDeltaFeature(int numOfSyllable)
 
 void EnergyFeXor::SaveFeature(vector< vector<double> >& features, int numOfSyllable)
 {
-	cout<<"Saving energy features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numOfSyllable; s++)
 	{
@@ -183,7 +185,7 @@ void EnergyFeXor::SaveFeature(vector< vector<double> >& features, int numOfSylla
 
 void EnergyFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numOfSyllable)
 {
-	cout<<"Saving energy delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numOfSyllable; s++)
 	{
@@ -211,7 +213,7 @@ void EnergyFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numOf
 
 void EnergyFeXor::ResetFeature(int numOfSyllable)
 {
-	cout<<"Reset EnergyFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	begin.clear();
 	end.clear();
@@ -233,7 +235,7 @@ void EnergyFeXor::ResetFeature(int numOfSyllable)
 
 void EnergyFeXor::ResetDeltaFeature(int numOfSyllable)
 {
-	cout<<"Reset EnergyFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	dBegin.clear();
 	dEnd.clear();
@@ -269,7 +271,8 @@ void EnergyFeXor::ResetDeltaFeature(int numOfSyllable)
  */
 void EnergyFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool extractDelta)
 {
-	cout<<"=== Extracting energy features ==="<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	InitializeFeature(u->GetNumberOfSyllables());
 	GetFeature(u);
 	SaveFeature(features, u->GetNumberOfSyllables());

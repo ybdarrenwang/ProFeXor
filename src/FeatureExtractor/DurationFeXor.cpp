@@ -2,7 +2,7 @@
 
 void DurationFeXor::InitializeFeature(int numSyllable)
 {
-	cout<<"Initializing features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	sylDur = vector<double>(numSyllable, 0);
 	n_sylDur = vector<double>(numSyllable, 0);
@@ -23,7 +23,7 @@ void DurationFeXor::InitializeFeature(int numSyllable)
 
 void DurationFeXor::InitializeDeltaFeature(int numSyllable)
 {
-	cout<<"Initializing delta features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	d_sylDur = vector<double>(numSyllable, 0);
 	d_n_sylDur = vector<double>(numSyllable, 0);
@@ -38,7 +38,7 @@ void DurationFeXor::InitializeDeltaFeature(int numSyllable)
 
 void DurationFeXor::GetIntraSyllableFeature(Utterance* u)
 {
-	cout<<"Get intra-syllable duration features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	avgSylDuration = 0;
 	for (int s=0; s<u->GetNumberOfSyllables(); s++)
@@ -69,7 +69,7 @@ void DurationFeXor::GetIntraSyllableFeature(Utterance* u)
 
 void DurationFeXor::GetCrossSyllableFeature(int numSyllable)
 {
-	cout<<"Get cross-syllable duration features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	int s2s_fw_counter = numSyllable; // number of syllables from the begin of sentence to here
 	int s2s_bw_counter = 0;
@@ -102,7 +102,7 @@ void DurationFeXor::GetCrossSyllableFeature(int numSyllable)
 
 void DurationFeXor::GetDeltaFeature(int numSyllable)
 {
-	cout<<"Get duration delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=1; s<numSyllable; s++)
 	{
@@ -120,7 +120,7 @@ void DurationFeXor::GetDeltaFeature(int numSyllable)
 
 void DurationFeXor::SaveFeature(vector< vector<double> >& features, int numSyllable)
 {
-	cout<<"Saving duration features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numSyllable; s++)
 	{
@@ -144,7 +144,7 @@ void DurationFeXor::SaveFeature(vector< vector<double> >& features, int numSylla
 
 void DurationFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numSyllable)
 {
-	cout<<"Saving duration delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numSyllable; s++)
 	{
@@ -162,7 +162,7 @@ void DurationFeXor::SaveDeltaFeature(vector< vector<double> >& features, int num
 
 void DurationFeXor::ResetFeature()
 {
-	cout<<"Reset DurationFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	sylDur.clear();
 	n_sylDur.clear();
@@ -183,7 +183,7 @@ void DurationFeXor::ResetFeature()
 
 void DurationFeXor::ResetDeltaFeature()
 {
-	cout<<"Reset DurationFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	d_sylDur.clear();
 	d_n_sylDur.clear();
@@ -204,7 +204,8 @@ void DurationFeXor::ResetDeltaFeature()
  */
 void DurationFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool extractDelta)
 {
-	cout<<"=== Extracting duration features ==="<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	InitializeFeature(u->GetNumberOfSyllables());
 	GetIntraSyllableFeature(u);
 	GetCrossSyllableFeature(u->GetNumberOfSyllables());

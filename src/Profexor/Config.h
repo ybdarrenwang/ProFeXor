@@ -25,6 +25,8 @@ class Config
 		bool GetExtractDelta(){return extractDelta;}
 		int GetNumOfSegment(){return numOfSegment;}
 
+		int GetNumOfThread(){return numOfThread;}
+
 	protected:
 		void Usage(const char *);
 		void InitConfig();
@@ -46,6 +48,8 @@ class Config
 		int w_s; ///<Window size for smoothing
 		bool extractDelta;
 		int numOfSegment;
+
+		int numOfThread;
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 void LinearInterpolater::Interpolate(vector<double>& p)
 {
-	cout<<"Performing linear interpolation"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	double beginValue = 0, endValue = 0;
 	int begin = 0, end = 0;

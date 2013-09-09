@@ -1,72 +1,75 @@
 #include "UtteranceBuilder.h"
+#include "debug.h"
 
 UtteranceBuilder::UtteranceBuilder(Config* c)
 {
+	DUMP("\n< Construct utterance builder >");
+
 	utt = 0;
 	noHeader = c->GetNoHeader();
 	samplingRate = c->GetSamplingRate();
 
-	if (c->GetSmoothWindowSize() > 0)	
+	if (c->GetSmoothWindowSize() > 0)
 	{
-		cout<<"Pitch contour smoothing: moving window smoothing with window size = "<<c->GetSmoothWindowSize()<<" frames"<<endl;
+		DUMP("- Pitch contour smoothing: moving window smoothing");
 		pitchContourSmoother = new MovingWindowSmoother(c->GetSmoothWindowSize());
 	}
 	else
 	{
-		cout<<"Pitch contour smoothing: disabled"<<endl;
+		DUMP("- Pitch contour smoothing: disabled");
 		pitchContourSmoother = 0;
 	}
 
 	if (c->GetNormalizeMode() == "utt")
 	{
-		cout<<"Pitch contour normalization: subtracting mean pitch of each utterance"<<endl;
+		DUMP("- Pitch contour normalization: subtracting mean pitch of each utterance");
 		pitchContourNormalizer = new MeanSubtraction();
 	}
 	else if (c->GetNormalizeMode() == "win")
 	{
-		cout<<"Pitch contour normalization: moving average subtraction with window size = "<<c->GetNormalizeWindowSize()<<" frames"<<endl;
+		DUMP("- Pitch contour normalization: moving average subtraction");
 		pitchContourNormalizer = new MovingWindowMeanSub(c->GetNormalizeWindowSize());
 	}
 	else if (c->GetNormalizeMode() == "off")
 	{
-		cout<<"Pitch contour normalization: disabled"<<endl;
+		DUMP("- Pitch contour normalization: disabled");
 		pitchContourNormalizer = 0;
 	}
 	else
 	{
-		cerr<<"Error: unknown pitch contour normalization mode: "<<c->GetNormalizeMode()<<endl;
+		cerr<<"[Error] unknown pitch contour normalization mode: "<<c->GetNormalizeMode()<<endl;
 		exit(1);
 	}
 
 	if (c->GetInterpolateMode() == "spline")
 	{
-		cout<<"Pitch contour interpolation: Cubic Spline"<<endl;
-		pitchContourInterpolater = new CubicSplineInterpolater();	
+		DUMP("- Pitch contour interpolation: Cubic Spline");
+		pitchContourInterpolater = new CubicSplineInterpolater();
 	}
 	else if (c->GetInterpolateMode() == "linear")
 	{
-		cout<<"Pitch contour interpolation: Linear"<<endl;
+		DUMP("- Pitch contour interpolation: Linear");
 		pitchContourInterpolater = new LinearInterpolater();
 	}
 	else
 	{
-		cerr<<"Error: unknown pitch contour interpolation mode: "<<c->GetInterpolateMode()<<endl;
+		cerr<<"[Error] unknown pitch contour interpolation mode: "<<c->GetInterpolateMode()<<endl;
 		exit(1);
 	}
 
 	if (c->GetENormalizeMode() == "max")
 	{
-		cout<<"Energy contour normalization: subtracting max energy of each utterance"<<endl;
+		DUMP("- Energy contour normalization: subtracting max energy of each utterance");
 		energyContourNormalizer = new MaxSubtraction();
 	}
 	else if (c->GetENormalizeMode() == "off")
 	{
-		cout<<"Energy contour normalization: disabled"<<endl;
+		DUMP("- Energy contour normalization: disabled");
 		energyContourNormalizer = 0;
 	}
 	else
 	{
-		cerr<<"Error: unknown energy contour normalization mode: "<<c->GetENormalizeMode()<<endl;
+		cerr<<"[Error] unknown energy contour normalization mode: "<<c->GetENormalizeMode()<<endl;
 		exit(1);
 	}
 }
@@ -82,7 +85,8 @@ UtteranceBuilder::~UtteranceBuilder()
 
 void UtteranceBuilder::NewUtterance()
 {
-	delete utt;
+	if (utt)
+		delete utt;
 	utt = new Utterance();
 }
 
@@ -110,11 +114,11 @@ void UtteranceBuilder::BuildPitchContour(UtteranceInfo* info)
 	int numFrame = info->GetTimeLabel(info->GetNumUnit()-1, 3);
 	if (pitchContour.size() != numFrame)
 	{
-		cout<<"Warning: length of pitch contour is different from time label"<<endl;
+		cerr<<"[Warning] ("+info->GetF0File()+") length of pitch contour is different from time label"<<endl;
 		if (pitchContour.size() < numFrame)
-			cout<<"Append "<<numFrame-pitchContour.size()<<" frames at the end of pitch contour"<<endl;
+			cerr<<"[Warning] ("+info->GetF0File()+") Append "<<numFrame-pitchContour.size()<<" frames at the end of pitch contour"<<endl;
 		else
-			cout<<"Remove "<<pitchContour.size()-numFrame<<" frames from the back of pitch contour"<<endl;
+			cerr<<"[Warning] ("+info->GetF0File()+") Remove "<<pitchContour.size()-numFrame<<" frames from the back of pitch contour"<<endl;
 		pitchContour.resize(numFrame);
 	}
 
@@ -141,7 +145,7 @@ void UtteranceBuilder::BuildAcousticUnit(UtteranceInfo* info)
 	{
 		if (rawTimeLabel[row][3] > pitchContour.size())
 		{
-			cerr<<"Error: time label at row "<<row+1
+			cerr<<"[Error] time label at row "<<row+1
 			<<" ("<<rawTimeLabel[row][0]<<" "<<rawTimeLabel[row][1]<<" "
 			<<rawTimeLabel[row][2]<<" "<<rawTimeLabel[row][3]
 			<<") exceed pitch contour length ("<<pitchContour.size()<<")"<<endl;
@@ -150,7 +154,7 @@ void UtteranceBuilder::BuildAcousticUnit(UtteranceInfo* info)
 
 		if (rawTimeLabel[row][3] > energyContour.size())
 		{
-			cerr<<"Error: time label at row "<<row+1
+			cerr<<"[Error] time label at row "<<row+1
 			<<" ("<<rawTimeLabel[row][0]<<" "<<rawTimeLabel[row][1]<<" "
 			<<rawTimeLabel[row][2]<<" "<<rawTimeLabel[row][3]
 			<<") exceed energy contour length ("<<energyContour.size()<<")"<<endl;

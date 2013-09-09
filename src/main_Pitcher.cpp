@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		cerr<<"Error: unknown pitch contour normalization mode: "<<normalizeMode<<endl;
+		cerr<<"[Error] unknown pitch contour normalization mode: "<<normalizeMode<<endl;
 		exit(1);
 	}
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		cerr<<"Error: unknown pitch contour interpolation mode: "<<interpolateMode<<endl;
+		cerr<<"[Error] unknown pitch contour interpolation mode: "<<interpolateMode<<endl;
 		exit(1);
 	}
 
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	ifstream ifs_list;
 	if (!openFile(ifs_list, in_list))
 	{
-		cerr<<"Error: cannot open file list "<<in_list<<endl;
+		cerr<<"[Error] cannot open file list "<<in_list<<endl;
 		exit(1);
 	}
 
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 		ofstream ofs_f0;
 		if (!openFile(ofs_f0, ioFiles[1]))
 		{
-			cerr<<"Warning: cannot open "<<ioFiles[1]<<endl;
+			cerr<<"[Error] cannot open "<<ioFiles[1]<<endl;
 			return 1;
 		}
 

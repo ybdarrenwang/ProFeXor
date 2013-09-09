@@ -8,4 +8,4 @@ echo ""
 echo ""
 echo "====== Execute ProFeXor with default settings ======"
 echo ""
-./ProFeXor -S PSDEX -D -m test.rec -d def.txt
+./ProFeXor -S PSDEX -D -m test.rec -d def.txt -t 2

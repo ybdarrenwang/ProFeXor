@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{setspace, indentfirst, graphicx, enumerate, authblk, hyperref}
+\usepackage[toc,page]{appendix}
 \usepackage[vmargin=3.18cm,hmargin=2.54cm]{geometry}
 \sloppy	% better line breaks
 \title{ProFeXor -- A ``Pro''sodic ``Fe''ature e``X''tract``or''}
@@ -53,6 +54,7 @@ I also created another stand-alone application called ``Pitcher'' for pitch cont
 \item Run "make" or "make all" to do all the above
 \item Run "make doc" to compile PDF manual
 \item Run "make doxygen" to create HTML pages of code structure (if you have installed Doxygen)
+\item Run "make debug" to compile ProFeXor and Pitcher for debugging
 \end{enumerate}
 
 \section{Settings and I/O File Format}
@@ -217,7 +219,6 @@ Note that trying to analyze feature importance while working with the latter cat
 For example, if the weight of pitch maximum is "1" and pitch minimum "-1", the model may be calculating the range of pitch. In this case "1" and "-1" does not mean anything if you look at them separately.
 
 Also, some traditional index of feature importance, such as entropy-related indices, are more correspondent the the criterion of Decision Tree-based models.
-
 
 \begin{thebibliography}{99}
 \bibitem{sri} K. Sonmez, E. Shriberg, L. Heck, and M. Weintraub, "Modeling dynamic prosodic variation for speaker verification," in Proc. ICSLP, 1998, pp. 3189~3192.

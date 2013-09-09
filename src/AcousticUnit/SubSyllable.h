@@ -12,7 +12,7 @@ class SubSyllable : public AcousticUnit
 		{
 			if (b>e)
 			{
-				cerr<<"Error(SubSyllable::SubSyllable): begin time > end time"<<endl;
+				cerr<<"[Error] (SubSyllable::SubSyllable) begin time > end time"<<endl;
 				exit(1);
 			}
 			beginTime=b;

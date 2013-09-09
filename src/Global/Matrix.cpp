@@ -37,7 +37,7 @@ void Matrix::Init(vector< vector<double> >& data)
 	{
 		if ((int)data[i].size() != dim[1])
 		{
-			cerr<<"Error: instance sizes for matrix initialization unequal"<<endl;
+			cerr<<"[Error] instance sizes for matrix initialization unequal"<<endl;
 			exit(1);
 		}
 
@@ -65,7 +65,7 @@ double Matrix::GetEntry(int i, int j)
 {
 	if (i>=dim[0] || i<0 || j>=dim[1] || j<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 	
@@ -76,7 +76,7 @@ void Matrix::SetEntry(int i, int j, double value)
 {
 	if (i>=dim[0] || i<0 || j>=dim[1] || j<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 	
@@ -87,7 +87,7 @@ void Matrix::GetRow(int i, vector<double>& tmp_row)
 {
 	if (i>=dim[0] || i<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 
@@ -100,12 +100,12 @@ void Matrix::SetRow(int i, vector<double>& row)
 {
 	if (i>=dim[0] || i<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 	if ((int)row.size() != dim[1])
 	{
-		cerr<<"Error: vector and matrix dimension does not match"<<endl;
+		cerr<<"[Error] vector and matrix dimension does not match"<<endl;
 		exit(1);
 	}
 
@@ -117,7 +117,7 @@ void Matrix::GetColumn(int j, vector<double>& col)
 {
 	if (j>=dim[1] || j<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 
@@ -130,12 +130,12 @@ void Matrix::SetColumn(int j, vector<double>& col)
 {
 	if (j>=dim[1] || j<0)
 	{
-		cerr<<"Error: request exceed matrix dimension"<<endl;
+		cerr<<"[Error] request exceed matrix dimension"<<endl;
 		exit(1);
 	}
 	if ((int)col.size() != dim[0])
 	{
-		cerr<<"Error: vector and matrix dimension does not match"<<endl;
+		cerr<<"[Error] vector and matrix dimension does not match"<<endl;
 		exit(1);
 	}
 
@@ -207,7 +207,7 @@ bool Matrix::IsIdentity()
 {
 	if (dim[0] != dim[1])
 	{
-		cerr<<"Warning: non-square matrix asked to check identity"<<endl;
+		cerr<<"[Warning] non-square matrix asked to check identity"<<endl;
 		return false;
 	}
 
@@ -240,7 +240,7 @@ Matrix Matrix_Mul(Matrix A, Matrix B)
 
 	if (A.GetDim(1) != B.GetDim(0))
 	{
-		cerr<<"Error: matrix dimension does not match for multiplication"<<endl;
+		cerr<<"[Error] matrix dimension does not match for multiplication"<<endl;
 		exit(1);
 	}
 
@@ -263,7 +263,7 @@ void Matrix_GaussJordan(Matrix& A, Matrix& B)
 {
 	if (A.GetDim(0) != B.GetDim(0))
 	{
-		cerr<<"Error: matrix dimension does not match for Gauss-Jordan elimination"<<endl;
+		cerr<<"[Error] matrix dimension does not match for Gauss-Jordan elimination"<<endl;
 		exit(1);
 	}
 
@@ -295,7 +295,7 @@ void Matrix_GaussJordan(Matrix& A, Matrix& B)
 			while(j<row_num && tmp_mat.GetEntry(j, i) == 0) j++;
 			if (j == row_num)
 			{
-				cerr<<"Error: not full rank square matrix, cannot perform Gauss-Jordan elimination"<<endl;
+				cerr<<"[Error] not full rank square matrix, cannot perform Gauss-Jordan elimination"<<endl;
 				exit(1);
 			}
 			else
@@ -324,7 +324,7 @@ void Matrix_GaussJordan(Matrix& A, Matrix& B)
 
 	if (!tmp_A.IsIdentity())
 	{
-		cerr<<"Error: input matrix for Gauss-Jordan elimination is not invertible"<<endl;
+		cerr<<"[Error] input matrix for Gauss-Jordan elimination is not invertible"<<endl;
 		exit(1);
 	}
 	else

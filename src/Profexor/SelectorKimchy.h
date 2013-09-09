@@ -17,7 +17,7 @@ class SelectorKimchy : public FeatureSelector
 	public:
 		SelectorKimchy();
 		~SelectorKimchy(){}
-		void GetExtractors(vector<FeatureExtractor*>&);
+		void InstallExtractors(vector<FeatureExtractor*>&);
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define PITCHCONTOURSTYLIZER_H
 
 #include "Utterance.h"
+#include "debug.h"
 
 class PitchContourStylizer
 {

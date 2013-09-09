@@ -5,6 +5,7 @@
 #include "Utterance.h"
 #include "mymath.h"
 #include "util.h"
+#include "debug.h"
 
 class FeatureExtractor
 {

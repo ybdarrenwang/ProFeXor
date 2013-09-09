@@ -7,7 +7,8 @@ using namespace std;
 
 void PauseFeXor::InitializeFeature(int numSyllable)
 {
-	cout<<"Initializing features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	ratioAvgSylDurationFromPrevUntilNextPause = vector<double>(numSyllable, 0);
 	ratio_prevSyl_avgSylDurationFromPrevPause = vector<double>(numSyllable, 0);
 	mulPauseSylDuration = vector<double>(numSyllable, 0);
@@ -24,7 +25,8 @@ void PauseFeXor::InitializeFeature(int numSyllable)
 
 void PauseFeXor::InitializeDeltaFeature(int numSyllable)
 {
-	cout<<"Initializing delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	d_ratioAvgSylDurationFromPrevUntilNextPause = vector<double>(numSyllable, 0);
 	d_ratio_prevSyl_avgSylDurationFromPrevPause = vector<double>(numSyllable, 0);
 	d_mulPauseSylDuration = vector<double>(numSyllable, 0);
@@ -39,7 +41,7 @@ void PauseFeXor::InitializeDeltaFeature(int numSyllable)
 
 void PauseFeXor::GetFeature(Utterance* u)
 {
-	cout<<"Get pause features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	Syllable *syllable, *prevSyllable, *nextSyllable;
 	Pause* prevPause;
@@ -102,12 +104,12 @@ void PauseFeXor::GetFeature(Utterance* u)
 		if (prevPause != 0)
 		{
 			mulPauseSylDuration[s] = syllable->GetDuration() * prevPause->GetDuration();
-			ratioPauseSylDuration[s] = syllable->GetDuration() / prevPause->GetDuration();
+			ratioPauseSylDuration[s] = prevPause->GetDuration() / syllable->GetDuration();
 
 			if (prevSyllable != 0)
 			{
 				mulSylPauseDuration[s] = prevSyllable->GetDuration() * prevPause->GetDuration();
-				ratioSylPauseDuration[s] = prevSyllable->GetDuration() / prevPause->GetDuration();
+				ratioSylPauseDuration[s] = prevPause->GetDuration() / prevSyllable->GetDuration();
 			}
 		}
 
@@ -129,7 +131,7 @@ void PauseFeXor::GetFeature(Utterance* u)
 
 void PauseFeXor::GetDeltaFeature(int numSyllable)
 {
-	cout<<"Get pause delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=1; s<numSyllable; s++)
 	{
@@ -149,7 +151,7 @@ void PauseFeXor::GetDeltaFeature(int numSyllable)
 
 void PauseFeXor::SaveFeature(vector< vector<double> >& features, int numSyllable)
 {
-	cout<<"Saving pause features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numSyllable; s++)
 	{
@@ -170,7 +172,7 @@ void PauseFeXor::SaveFeature(vector< vector<double> >& features, int numSyllable
 
 void PauseFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numSyllable)
 {
-	cout<<"Saving pause delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numSyllable; s++)
 	{
@@ -189,7 +191,7 @@ void PauseFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numSyl
 
 void PauseFeXor::ResetFeature()
 {
-	cout<<"Reset PauseFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	ratioAvgSylDurationFromPrevUntilNextPause.clear();
 	ratio_prevSyl_avgSylDurationFromPrevPause.clear();
@@ -207,7 +209,8 @@ void PauseFeXor::ResetFeature()
 
 void PauseFeXor::ResetDeltaFeature()
 {
-	cout<<"Reset PauseFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	d_ratioAvgSylDurationFromPrevUntilNextPause.clear();
 	d_ratio_prevSyl_avgSylDurationFromPrevPause.clear();
 	d_mulPauseSylDuration.clear();
@@ -228,7 +231,8 @@ void PauseFeXor::ResetDeltaFeature()
  */
 void PauseFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool extractDelta)
 {
-	cout<<"=== Extracting pause features ==="<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	InitializeFeature(u->GetNumberOfSyllables());
 	GetFeature(u);
 	SaveFeature(features, u->GetNumberOfSyllables());

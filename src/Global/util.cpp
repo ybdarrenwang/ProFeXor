@@ -100,7 +100,6 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 	char *path = new char[200];
 
 	// read wave & Load wave info.
-	cout<<"Reading "<<file_name<<"......"<<endl;
 	stringstream sstream(file_name);
 	sstream >> path;
 
@@ -110,7 +109,7 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 		ifstream is;
 		if(!openFile(is, path))
 		{
-			cerr<<"Error: cannot open "<<file_name<<endl;
+			cerr<<"[Error] cannot open "<<file_name<<endl;
 			exit(1);
 		}
 		
@@ -143,7 +142,7 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 	frame_shift = (int)floor(frame_shift_sec*rate);
 	frame_num = (int)floor((double)(size-frame_len)/frame_shift) + 1;
 
-	cout<<"Sampling rate = "<<rate<<endl;
+	cout<<"< Read "<<file_name<<" with sampling rate = "<<rate<<" >"<<endl;
 	
 	// calculate frame energy
 	vector<double> frame; // a queue storing sample energy values
@@ -191,10 +190,11 @@ void LoadF0(string file_name, vector<double>& data)
 	ifstream in_f0;
 	if (!openFile(in_f0,file_name))
 	{
-		cerr<<"Error: cannot open file "<<file_name<<endl;
+		cerr<<"[Error] cannot open file "<<file_name<<endl;
 		exit(1);
 	}
-	cout<<"Reading "<<file_name<<"......"<<endl;
+
+	cout<<"< Read "<<file_name<<" >"<<endl;
 	
 	string line;
 	while(!getLine(in_f0, line))
@@ -202,7 +202,7 @@ void LoadF0(string file_name, vector<double>& data)
 		// Read formatted data from a string.
 		float f0 = atof(split(line)[0].c_str());
 		if(f0>1000 ||(f0>0 && f0<1e-5))
-			cout<<"warning: abnormal f0 value: "<<line<<endl;
+			cout<<"[Warning] abnormal f0 value: "<<line<<endl;
 		data.push_back(f0);
 	}
 }

@@ -2,6 +2,8 @@
 
 Config::Config(int argc, char** argv)
 {
+	InitConfig();
+
 	if( argc < 2 )
 	{
 		Usage( argv[0] );
@@ -14,8 +16,6 @@ Config::Config(int argc, char** argv)
 		string tmpstr(argv[i]);
 		Args.push_back( tmpstr );
 	}
-
-	InitConfig();
 	ReadConfig(Args);
 }
 
@@ -70,6 +70,8 @@ void Config::Usage( const char *prog )
 	     << "                             spline: Cubic Spline interpolation\n"
 	     << "                             linear: Linear interpolation\n"
 	     << "\n"
+	     << "  -t N                       set number of threads as N                    (default: " << numOfThread << ")\n"
+	     << "\n"
 	     << endl;
 	exit(1);
 }
@@ -88,12 +90,13 @@ void Config::InitConfig()
 	w_s = 0;
 	extractDelta = false;
 	numOfSegment = 3;
+	numOfThread = 1;
 }
 
 // Read command line option and set proper global var.
 void Config::ReadConfig(vector<string> &Args)
 {
-	cout<<endl<<"====== Reading options ======"<< endl;
+	cout<<"< Read options >"<< endl;
 
 	for( unsigned int i = 0; i < Args.size(); i ++ )
 	{
@@ -101,18 +104,18 @@ void Config::ReadConfig(vector<string> &Args)
 		{
 			i++;
 			featureSet = Args[i];
-			cout<<"Selected features: "<<Args[i]<<endl;
+			cout<<"- Selected features: "<<Args[i]<<endl;
 		}
 		else if( Args[i] == "-D" && Args.size() > i )
 		{
 			extractDelta = true;
-			cout<<"Delta-features will also be extracted"<<endl;
+			cout<<"- Delta-features will also be extracted"<<endl;
 		}
 		else if( Args[i] == "-m" && Args.size() > i )
 		{
 			i++;
 			inRECFile = Args[i];
-			cout<<"REC file: "<<Args[i]<<endl;
+			cout<<"- Time label file: "<<Args[i]<<endl;
 		}
 		else if( Args[i] == "-pitchNorm" && Args.size() > i )
 		{
@@ -150,28 +153,72 @@ void Config::ReadConfig(vector<string> &Args)
 		{
 			i++;
 			outDefFile = Args[i];
-			cout<<"Output feature definition file: "<<outDefFile<<endl;
+			cout<<"- Output feature definition file: "<<outDefFile<<endl;
 		}
 		else if( Args[i] == "-noHeader" && Args.size() > i )
 		{
 			noHeader = true;
-			cout<<"Set input wave files as no header"<<endl;
+			cout<<"- Set input wave files as no header"<<endl;
 		}
 		else if( Args[i] == "-samplingRate" && Args.size() > i )
 		{
 			i++;
 			stringstream ss(Args[i]);
 			ss >> samplingRate;
-			cout<<"Set input wave files sampling rate="<<samplingRate<<endl;
+			cout<<"- Set input wave files sampling rate="<<samplingRate<<endl;
 		}
 		else if( Args[i] == "-numOfSegment" && Args.size() > i )
 		{
 			i++;
 			stringstream ss(Args[i]);
 			ss >> numOfSegment;
-			cout<<"Set number of equi-partitioning nuclei segment="<<numOfSegment<<endl;
+		}
+		else if( Args[i] == "-t" && Args.size() > i )
+		{
+			i++;
+			stringstream ss(Args[i]);
+			ss >> numOfThread;
+			cout<<"- Set number of threads="<<numOfThread<<endl;
 		}
 	}
 
-	cout<<"Output feature file: "<<outFeaFile<<endl;
+	cout<<"- Set number of equi-partitioning nuclei segment="<<numOfSegment<<endl;
+	cout<<"- Output feature file: "<<outFeaFile<<endl;
+
+	if (w_s > 0)	
+		cout<<"- Pitch contour smoothing: moving window smoothing with window size = "<<w_s<<" frames"<<endl;
+	else
+		cout<<"- Pitch contour smoothing: disabled"<<endl;
+
+	if (normalizeMode == "utt")
+		cout<<"- Pitch contour normalization: subtracting mean pitch of each utterance"<<endl;
+	else if (normalizeMode == "win")
+		cout<<"- Pitch contour normalization: moving average subtraction with window size = "<<w_n<<" frames"<<endl;
+	else if (normalizeMode == "off")
+		cout<<"- Pitch contour normalization: disabled"<<endl;
+	else
+	{
+		cerr<<"[Error] unknown pitch contour normalization mode: "<<normalizeMode<<endl;
+		exit(1);
+	}
+
+	if (interpolateMode == "spline")
+		cout<<"- Pitch contour interpolation: Cubic Spline"<<endl;
+	else if (interpolateMode == "linear")
+		cout<<"- Pitch contour interpolation: Linear"<<endl;
+	else
+	{
+		cerr<<"[Error] unknown pitch contour interpolation mode: "<<interpolateMode<<endl;
+		exit(1);
+	}
+
+	if (eNormalizeMode == "max")
+		cout<<"- Energy contour normalization: subtracting max energy of each utterance"<<endl;
+	else if (eNormalizeMode == "off")
+		cout<<"- Energy contour normalization: disabled"<<endl;
+	else
+	{
+		cerr<<"[Error] unknown energy contour normalization mode: "<<eNormalizeMode<<endl;
+		exit(1);
+	}
 }

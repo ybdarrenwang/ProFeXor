@@ -2,7 +2,7 @@
 
 void PitchFeXor::InitializeFeature(int numOfSyllable)
 {
-	cout<<"Initializing features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	begin = vector<double>(numOfSyllable, 0);
 	end = vector<double>(numOfSyllable, 0);
@@ -29,7 +29,7 @@ void PitchFeXor::InitializeFeature(int numOfSyllable)
 
 void PitchFeXor::InitializeDeltaFeature(int numOfSyllable)
 {
-	cout<<"Initializing delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	d_begin = vector<double>(numOfSyllable, 0);
 	d_end = vector<double>(numOfSyllable, 0);
@@ -60,14 +60,15 @@ void PitchFeXor::InitializeDeltaFeature(int numOfSyllable)
 
 void PitchFeXor::GetFeature(Utterance* u)
 {
-	cout<<"Get pitch features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	for (int syl=0; syl<u->GetNumberOfSyllables(); syl++)
 	{
 		SubSyllable* nuclei = u->GetSyllable(syl)->GetNuclei();
 		int nucleiDuration = nuclei->GetDuration();
 		if (nucleiDuration < 2)
 		{
-			cerr<<"Error: nuclei duration < 2, will be skipped"<<endl;
+			cerr<<"[Error] nuclei duration < 2, will be skipped"<<endl;
 			continue;
 		}
 
@@ -98,7 +99,7 @@ void PitchFeXor::GetFeature(Utterance* u)
 		{
 			if (nucleiDuration < numOfSegment*2)
 			{
-				cerr<<"Warning: duration of nuclei is too short to break into "<<numOfSegment<<" segments, will calculate the features of whole contour as of each contour-segment"<<endl;
+				DUMP("[Warning] duration of nuclei is too short to break into segments, will calculate the features of whole contour as of each contour-segment");
 				for (int seg=0; seg<numOfSegment; seg++)
 				{
 					avgSegmentPitch[syl][seg] = avgPitch[syl];
@@ -130,7 +131,7 @@ void PitchFeXor::GetFeature(Utterance* u)
 
 void PitchFeXor::GetDeltaFeature(int numOfSyllable)
 {
-	cout<<"Get pitch delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int syl=0; syl<numOfSyllable; syl++)
 	{
@@ -184,7 +185,7 @@ void PitchFeXor::GetDeltaFeature(int numOfSyllable)
 
 void PitchFeXor::SaveFeature(vector< vector<double> >& features, int numOfSyllable)
 {
-	cout<<"Saving pitch features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numOfSyllable; s++)
 	{
@@ -212,7 +213,7 @@ void PitchFeXor::SaveFeature(vector< vector<double> >& features, int numOfSyllab
 
 void PitchFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numOfSyllable)
 {
-	cout<<"Saving pitch delta-features"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	for (int s=0; s<numOfSyllable; s++)
 	{
@@ -244,7 +245,7 @@ void PitchFeXor::SaveDeltaFeature(vector< vector<double> >& features, int numOfS
 
 void PitchFeXor::ResetFeature(int numOfSyllable)
 {
-	cout<<"Reset PitchFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	begin.clear();
 	end.clear();
@@ -278,7 +279,7 @@ void PitchFeXor::ResetFeature(int numOfSyllable)
 
 void PitchFeXor::ResetDeltaFeature(int numOfSyllable)
 {
-	cout<<"Reset PitchFeXor cache"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
 
 	d_begin.clear();
 	d_end.clear();
@@ -319,7 +320,8 @@ void PitchFeXor::ResetDeltaFeature(int numOfSyllable)
  */
 void PitchFeXor::Extract(Utterance* u, vector< vector<double> >& features, bool extractDelta)
 {
-	cout<<"=== Extracting pitch features ==="<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	InitializeFeature(u->GetNumberOfSyllables());
 	GetFeature(u);
 	SaveFeature(features, u->GetNumberOfSyllables());

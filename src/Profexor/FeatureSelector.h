@@ -9,7 +9,7 @@ class FeatureSelector
 		virtual ~FeatureSelector(){}
 		virtual void SelectFeature(vector<double>&);
 		virtual void SelectDefinition(vector<string>&);
-		virtual void GetExtractors(vector<FeatureExtractor*>&) = 0;
+		virtual void InstallExtractors(vector<FeatureExtractor*>&) = 0;
 
 	protected:
 		vector<int> myFeatureSet;

@@ -4,7 +4,8 @@ using namespace std;
 
 void CubicSplineInterpolater::Interpolate(vector<double>& p)
 {
-	cout<<"Performing Cubic Spline interpolation"<<endl;
+	DUMP(__PRETTY_FUNCTION__);
+
 	vector<double> availablePoints, availableData;
 	int originalLength = p.size();
 	for (int i=0; i<originalLength; i++)
