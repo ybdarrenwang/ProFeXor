@@ -83,11 +83,10 @@ void PauseFeXor::GetFeature(Utterance* u)
 		}
 		else
 		{
-			tmpSumSylDurationFromPrevPause += syllable->GetDuration();
-			tmpSumSylDurationUntilNextPause -= syllable->GetDuration();
+			tmpSumSylDurationFromPrevPause += prevSyllable->GetDuration();
+			tmpSumSylDurationUntilNextPause -= prevSyllable->GetDuration();
 			tmpNumSylFromPrevPause++;
 			tmpNumSylUntilNextPause--;
-
 		}
 
 		// long-term features
@@ -256,7 +255,7 @@ void PauseFeXor::PrintDefinition(vector<string>& definition)
 	definition.push_back("<Pause::mulSylPauseDuration> Product between pause duration and the preceding syllable duration");
 	definition.push_back("<Pause::ratioPauseSylDuration> Ratio between pause duration and the following syllable duration");
 	definition.push_back("<Pause::ratioSylPauseDuration> Ratio between pause duration and the preceding syllable duration");
-	definition.push_back("<Pause::stdDev_mulPauseSylDuration> Standard deviation of current and 2 preceding values of the product between pause duration and the preceding syllable duration");
+	definition.push_back("<Pause::stdDev_mulPauseSylDuration> Standard deviation of current and 2 preceding values of the product between pause duration and the following syllable duration");
 	definition.push_back("<Pause::stdDev_mulSylPauseDuration> Standard deviation of current and 2 preceding values of the product between pause duration and the preceding syllable duration");
 	definition.push_back("<Pause::stdDev_ratioPauseSylDuration> Standard deviation of current and 2 preceding values of the ratio between pause duration and the following syllable duration");
 	definition.push_back("<Pause::stdDev_ratioSylPauseDuration> Standard deviation of current and 2 preceding values of the ratio between pause duration and the preceding syllable duration");
@@ -272,7 +271,7 @@ void PauseFeXor::PrintDeltaDefinition(vector<string>& definition)
 	definition.push_back("<Pause::d_mulSylPauseDuration> Delta, product between pause duration and the preceding syllable duration");
 	definition.push_back("<Pause::d_ratioPauseSylDuration> Delta, ratio between pause duration and the following syllable duration");
 	definition.push_back("<Pause::d_ratioSylPauseDuration> Delta, ratio between pause duration and the preceding syllable duration");
-	definition.push_back("<Pause::d_stdDev_mulPauseSylDuration> Delta, standard deviation of current and 2 preceding values of the product between pause duration and the preceding syllable duration");
+	definition.push_back("<Pause::d_stdDev_mulPauseSylDuration> Delta, standard deviation of current and 2 preceding values of the product between pause duration and the following syllable duration");
 	definition.push_back("<Pause::d_stdDev_mulSylPauseDuration> Delta, standard deviation of current and 2 preceding values of the product between pause duration and the preceding syllable duration");
 	definition.push_back("<Pause::d_stdDev_ratioPauseSylDuration> Delta, standard deviation of current and 2 preceding values of the ratio between pause duration and the following syllable duration");
 	definition.push_back("<Pause::d_stdDev_ratioSylPauseDuration> Delta, standard deviation of current and 2 preceding values of the ratio between pause duration and the preceding syllable duration");
