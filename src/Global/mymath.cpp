@@ -567,8 +567,8 @@ void getMinMax(double* data, double& min, double& max, int n)
 	if (n > 2)
 	{
 		double min_1, max_1, min_2, max_2;
-		getMinMax(&(data[0]), min_1, max_1, (int)floor(n/2));
-		getMinMax(&(data[(int)floor(n/2)]), min_2, max_2, (int)ceil(n/2));
+		getMinMax(&(data[0]), min_1, max_1, (int)floor((float)n/2));
+		getMinMax(&(data[(int)floor((float)n/2)]), min_2, max_2, (int)ceil((float)n/2));
 
 		if (min_1 < min_2)
 			min = min_1;
