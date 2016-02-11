@@ -1,10 +1,14 @@
-ProFeXor ("Pro"sodic "Fe"ature e"X"tract"or") is an application that extracts prosodic features from speech wave files based on corresponding raw pitch contours and time labels. 
+[ProFeXor]
+==========
 
-We have yet another stand-alone application for pitch contour processing called "Pitcher". Note you don't have to run Pitcher before ProFeXor, because the function of Pitcher is also embedded in ProFeXor.
+[ProFeXor] ("Pro"sodic "Fe"ature e"X"tract"or") is an application that extracts prosodic features from speech wave files based on corresponding raw pitch contours and time labels. 
+
+[Pitcher] is yet another stand-alone application for pitch contour processing. Note you don't have to run Pitcher before ProFeXor, because the function of Pitcher is also embedded in ProFeXor.
 
 See the documentation or play in test folder for more information!
 
-<Installation>
+Installation
+------------
 
 1. Run "make dir" to create folders
 2. Run "make profexor" to compile ProFeXor into executable
