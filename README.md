@@ -7,6 +7,12 @@ Along with ProFeXor, this repo contains yet another stand-alone application "Pit
 
 See the documentation or play in test folder for more information!
 
+Requirements
+------------
+- g++ 4.2 or higher
+- pdflatex (for make doc)
+- Doxygen (for make doxygen)
+
 Installation
 ------------
 
@@ -16,4 +22,4 @@ Installation
 4. Run "make test" to copy the executables into test folder
 5. Run "make" or "make all" to do all the above
 6. Run "make doc" to compile PDF manual (NOTE: pdflatex needed)
-7. Run "make doxygen" to create HTML pages of code structure (NOTE: Doxygen needed)
+7. Run "make doxygen" to create HTML pages explaining code structure (NOTE: Doxygen needed)
