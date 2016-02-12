@@ -7,6 +7,10 @@ Along with ProFeXor, this repo contains yet another stand-alone application "Pit
 
 See the documentation or play in test folder for more information!
 
+Platforms
+---------
+Linux, OS X
+
 Requirements
 ------------
 - g++ 4.2 or higher
