@@ -1,14 +1,3 @@
-#include <iostream> 
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <stdio.h>   
-#include <iomanip>   
-#include <stdlib.h>  
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-
 #include "Normalizer.h"
 #include "MeanSubtraction.h"
 #include "MovingWindowMeanSub.h"
@@ -168,8 +157,8 @@ int main(int argc, char **argv)
 	}
 
 	// Prepare for I/O
-	ifstream ifs_list;
-	if (!openFile(ifs_list, in_list))
+	ifstream ifs_list(in_list.c_str());
+	if (!ifs_list.is_open())
 	{
 		cerr<<"[Error] cannot open file list "<<in_list<<endl;
 		exit(1);
@@ -180,7 +169,8 @@ int main(int argc, char **argv)
 	UtteranceInfo info;
 	string line;
 	vector<string> ioFiles;
-	while(!getLine(ifs_list, line))
+	//while(!getLine(ifs_list, line))
+	while(getline(ifs_list, line))
 	{
 		ioFiles = split(line);
 		LoadF0(ioFiles[0], pitchContour);
@@ -207,8 +197,8 @@ int main(int argc, char **argv)
 			pitchContourNormalizer->Normalize(pitchContour, &info);
 
 		// output
-		ofstream ofs_f0;
-		if (!openFile(ofs_f0, ioFiles[1]))
+		ofstream ofs_f0(ioFiles[1].c_str());
+		if (!ofs_f0.is_open())
 		{
 			cerr<<"[Error] cannot open "<<ioFiles[1]<<endl;
 			return 1;

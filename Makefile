@@ -6,7 +6,7 @@ DOXYGENCFG = $(DOC)/doxygen.cfg
 CDIR = cd
 MKDIR = mkdir -p
 CP = cp
-RM = rm -f
+RM = rm -rf
 
 # folders
 DOC = doc
@@ -59,5 +59,4 @@ doxygen:
 
 .PHONY : clean
 clean:
-	$(RM) $(ProFeXorOBJ)
-	$(RM) $(PitcherOBJ)
+	$(RM) $(OBJfolder)

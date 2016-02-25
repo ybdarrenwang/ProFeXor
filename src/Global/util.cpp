@@ -11,39 +11,6 @@ string int2str(int i)
 	return s;
 }
 
-bool openFile( ifstream &f, const char *FileName )
-{
-	f.open( FileName );
-	return f.good();
-}
-
-bool openFile( ofstream &f, const char *FileName )
-{
-	f.open( FileName, ios::trunc );
-	return f.good();
-}
-
-bool openFile( ifstream &f, string& FileName )
-{
-    return openFile( f, FileName.c_str() );
-}
-
-bool openFile( ofstream &f, string& FileName )
-{
-	return openFile( f, FileName.c_str() );
-}
-
-void removeLineFeed( string &str )
-{
-	removeChar( str, '\r' );
-}
-
-void removeChar( string &str, char c )
-{
-	int i;
-	while( (i=str.find(c)) >= 0 ) str.erase( i, i+1 );
-}
-
 /**
 * split string with spaces
 */
@@ -54,37 +21,6 @@ vector<string> split(const std::string& s)
 	return vec;
 }
 
-/**
-* split string with assigned splitter
-*/
-vector<string> split(const std::string& in_str, std::string splitter)
-{
-	string tmp_str = in_str;
-	vector<string> tmp_vec;
-
-	size_t end_pos = tmp_str.find(splitter);
-	while(end_pos!=string::npos)
-	{
-		tmp_vec.push_back( tmp_str.substr(0, end_pos) );
-		tmp_str = tmp_str.substr(end_pos+splitter.size(), tmp_str.size()-end_pos-splitter.size()+1);
-		end_pos = tmp_str.find(splitter);
-	}
-	tmp_vec.push_back( tmp_str.substr(0, tmp_str.size()) );
-
-	return tmp_vec;
-}
-
-/**
-* Read line, remove Carrige Return "\r";
-* and return #items separated by space or blank or tag
-*/
-bool getLine( istream& is, string &str )
-{
-	getline(is,str);
-	removeLineFeed(str);
-
-	return is.eof();
-}
 
 /**
 * Directly calculate energy from wave file
@@ -106,8 +42,8 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 	if (no_header)
 	{
 		myWav = new WavFileForIO();
-		ifstream is;
-		if(!openFile(is, path))
+		ifstream is(path);
+		if(!is.is_open())
 		{
 			cerr<<"[Error] cannot open "<<file_name<<endl;
 			exit(1);
@@ -187,17 +123,15 @@ void LoadWave(string file_name, bool no_header, int sampling_rate, vector<double
 
 void LoadF0(string file_name, vector<double>& data)
 {
-	ifstream in_f0;
-	if (!openFile(in_f0,file_name))
+	ifstream in_f0(file_name.c_str());
+	if (!in_f0.is_open())
 	{
 		cerr<<"[Error] cannot open file "<<file_name<<endl;
 		exit(1);
 	}
-
 	cout<<"< Read "<<file_name<<" >"<<endl;
-	
 	string line;
-	while(!getLine(in_f0, line))
+	while(getline(in_f0, line))
 	{
 		// Read formatted data from a string.
 		float f0 = atof(split(line)[0].c_str());

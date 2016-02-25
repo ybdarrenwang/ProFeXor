@@ -7,12 +7,10 @@
 
 #include <fstream>
 #include <iostream>
-#include <string.h>
 #include <sstream>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <iomanip>   
+#include <string>
+#include <cstdlib>
 #include <cmath>
 #include <algorithm>
 #include <vector>

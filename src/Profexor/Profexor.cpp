@@ -36,8 +36,8 @@ void ProFeXor::ExtractFeature()
 	// report
 	cout<<"< Write "<<feaFile<<" >"<<endl;
 
-	ofstream ofs;
-	if(!openFile(ofs, feaFile))
+	ofstream ofs(feaFile.c_str());
+	if(!ofs.is_open())
 	{
 		cerr<<"[Error] cannot open "<<feaFile<<endl;
 		exit(1);
@@ -51,16 +51,14 @@ void ProFeXor::ExtractFeature()
 
 void ProFeXor::WriteDefinition()
 {
-	ofstream ofs;
-	if(!openFile(ofs, defFile))
+	ofstream ofs(defFile.c_str());
+	if(!ofs.is_open())
 	{
 		cout<<"< No feature definition file output >"<<endl;
 		return;
 	}
-	
 	cout<<"< Write "<<defFile<<" >"<<endl;
 	students[0].WriteDefinition(ofs);
-	
 	ofs.close();
 }
 
@@ -68,20 +66,20 @@ void ProFeXor::LoadREC(string recFile)
 {
 	cout<<"< Read "<<recFile<<" >"<<endl;
 
-	ifstream ifs_recFile;
-	if (!openFile(ifs_recFile, recFile))
+	ifstream ifs_recFile(recFile.c_str());
+	if (!ifs_recFile.is_open())
 	{
 		cerr<<"[Error] cannot open "<<recFile<<endl;
 		exit(1);
 	}
 
-	string line("");
+	string line;
 	UtteranceInfo tmpUttInfo;
-	while(!getLine(ifs_recFile, line))
+	while(getline(ifs_recFile, line))
 	{
-		if( line.find('"',0) != string::npos ) ///< file name found
+		if(line[0] == '"') ///< file name found
 		{
-			removeChar(line, '"');
+            line = line.substr(1,line.length()-2); // remove quotation marks
 			if ( line.find(".wav") != string::npos) ///< wave file
 				tmpUttInfo.SetWaveFile(line);
 			else if ( line.find(".f0") != string::npos) ///< F0 file

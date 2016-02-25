@@ -11,6 +11,8 @@
 // at evan at thisisnotalabel dot com, so we can share your changes with the world
 
 #include "global.h"
+#include <cstring>
+
 using namespace std;
 
 class WavFileForIO

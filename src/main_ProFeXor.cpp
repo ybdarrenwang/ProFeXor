@@ -1,21 +1,3 @@
-#include <iostream> 
-#include <fstream>
-#include <sstream>
-#include <map>
-#include <set>    
-#include <string>
-#include <cstring>
-#include <cstdlib>
-
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>      
-#include <stdio.h>   
-#include <iomanip>   
-#include <stdlib.h>  
-#include <cmath>
-
 #include "Config.h"
 #include "Profexor.h"
 
