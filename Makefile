@@ -33,14 +33,14 @@ all: dir profexor pitcher test
 debug: CXX += -DDEBUG -g
 debug: dir profexor pitcher test
 
-dir:
-	mkdir -p $(OBJfolder)/$(MACHINE) $(BIN)/$(MACHINE)
-
 profexor: $(ProFeXorOBJ)
 	$(CXX) $(Include) $(CXXFLAGS) -o $(BIN)/$(MACHINE)/ProFeXor $^
 
 pitcher: $(PitcherOBJ)
 	$(CXX) $(Include) $(CXXFLAGS) -o $(BIN)/$(MACHINE)/Pitcher $^
+
+dir:
+	mkdir -p $(OBJfolder)/$(MACHINE) $(BIN)/$(MACHINE)
 
 obj/$(MACHINE)/%.o: %.cpp
 	$(CXX) $(Include) -c -o $@ $<

@@ -47,14 +47,14 @@ void ReadArguments(int argc, char **argv, string &in_list, string &interpolateMo
 	}
 
 	vector<string> Args;
-	for( int i = 1; i < argc; i ++ )
+	for(unsigned int i=1; i!=argc; ++i)
 	{
 		string tmpstr(argv[i]);
 		Args.push_back( tmpstr );
 	}
 
 	cout << "====== Read options ======" << endl;
-	for( unsigned int i = 0; i < Args.size(); i++ )
+	for(unsigned int i=0; i!=Args.size(); ++i)
 	{
 		if( Args[i] == "-i" && Args.size() > i )
 		{
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
 		}
 
 		cout<<"Writing "<<ioFiles[1]<<"......"<<endl;
-		for (int i=0; i<pitchContour.size(); i++)
+		for (unsigned int i=0; i!=pitchContour.size(); ++i)
 			ofs_f0<<pitchContour[i]<<"\n";
 		ofs_f0.close();
 		
