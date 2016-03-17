@@ -20,10 +20,10 @@ Requirements
 Installation
 ------------
 
-1. Run "make dir" to create folders
-2. Run "make profexor" to compile ProFeXor into executable
-3. Run "make pitcher" to complie Pitcher into executable
-4. Run "make test" to copy the executables into test folder
-5. Run "make" or "make all" to do all the above
-6. Run "make doc" to compile PDF manual (NOTE: pdflatex needed)
-7. Run "make doxygen" to create HTML pages explaining code structure (NOTE: Doxygen needed)
+1. `make dir` to create folders
+2. `make profexor` to compile ProFeXor into executable
+3. `make pitcher` to complie Pitcher into executable
+4. `make test` to copy the executables into test folder
+5. `make` or `make all` to do all the above
+6. `make doc` to compile PDF manual (NOTE: pdflatex needed)
+7. `make doxygen` to create HTML pages explaining code structure (NOTE: Doxygen needed)
